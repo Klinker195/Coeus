@@ -11,7 +11,7 @@ public class GUIController {
 	private static GUIController ControllerIstance = null;
 	
 	private GUIController() {
-		// Non è possibile creare un'altra istanza di GUIController
+		// The constructor's private so that it's impossible to create two or more istances of GUIController.
 	}
 	
 	public static void main(String args[]) {
@@ -31,7 +31,16 @@ public class GUIController {
 	}
 	
 	public void start() {
+		
+		// if UserFounder resultset .next() returns false then the program doesn't have a founder so it has to do an extra step.
+		
 		LoginWindow LoginScreen = new LoginWindow();
 		LoginScreen.setVisible(true);
 	}
+	
+	
+	public String calculateCF() {
+		
+	}
+	
 }
