@@ -38,10 +38,6 @@ public class LoginWindow extends JFrame {
 	private int height = gd.getDisplayMode().getHeight();
 	private GUIController GuiController = GUIController.getIstance();
 	
-
-	/**
-	 * Create the frame.
-	 */
 	public LoginWindow() {
 		setResizable(false);
 		setUndecorated(true);

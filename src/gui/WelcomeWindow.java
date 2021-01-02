@@ -19,6 +19,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class WelcomeWindow extends JFrame {
 
@@ -27,25 +29,12 @@ public class WelcomeWindow extends JFrame {
 	private int width = gd.getDisplayMode().getWidth();
 	private int height = gd.getDisplayMode().getHeight();
 	private GUIController GuiController = GUIController.getIstance();
-	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					WelcomeWindow frame = new WelcomeWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	public WelcomeWindow() {
 		setResizable(false);
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(width/2 - 275, height/2 - 175, 550, 380);
+		setBounds(width/2 - 275, height/2 - 190, 550, 380);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -61,7 +50,7 @@ public class WelcomeWindow extends JFrame {
 		contentPane.add(panel_1, BorderLayout.CENTER);
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblNewLabel = new JLabel("Coeus\r\n");
+		JLabel lblNewLabel = new JLabel("Welcome to\r\n");
 		lblNewLabel.setForeground(new Color(153, 51, 51));
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 80));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -70,7 +59,12 @@ public class WelcomeWindow extends JFrame {
 		JPanel panel_3 = new JPanel();
 		panel_1.add(panel_3, BorderLayout.SOUTH);
 		
-		JButton btnAvanti = new JButton("Avanti");
+		JButton btnAvanti = new JButton("Next");
+		btnAvanti.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// METODO GUICONTROLLER -> REGISTRATION WINDOW
+			}
+		});
 		btnAvanti.setPreferredSize(new Dimension(120, 30));
 		btnAvanti.setForeground(new Color(153, 51, 51));
 		btnAvanti.setFont(new Font("Roboto", Font.PLAIN, 26));
@@ -78,6 +72,13 @@ public class WelcomeWindow extends JFrame {
 		btnAvanti.setBorder(new LineBorder(new Color(153, 51, 51), 2, true));
 		btnAvanti.setBackground(new Color(153, 51, 51));
 		panel_3.add(btnAvanti);
+		
+		JLabel lblCoeus = new JLabel("Coeus\r\n");
+		lblCoeus.setVerticalAlignment(SwingConstants.TOP);
+		lblCoeus.setHorizontalAlignment(SwingConstants.CENTER);
+		lblCoeus.setForeground(new Color(153, 51, 51));
+		lblCoeus.setFont(new Font("Tahoma", Font.PLAIN, 80));
+		panel_1.add(lblCoeus, BorderLayout.CENTER);
 		
 		JPanel panel_2 = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel_2.getLayout();

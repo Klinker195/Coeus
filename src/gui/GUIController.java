@@ -11,7 +11,8 @@ import dao.UserFounderDAO;
 public class GUIController {
 
 	private static UserFounderDAO UserFounderDAO = new UserFounderDAOPostgre();
-	
+	private LoginWindow LoginScreen;
+	private WelcomeWindow WelcomeWindow;
 	private static GUIController ControllerIstance = null;
 	
 	private GUIController() {
@@ -37,12 +38,13 @@ public class GUIController {
 	public void start() {
 		
 		if(UserFounderDAO.isEmpty()) {
-			WelcomeWindow WelcomeWindow = new WelcomeWindow();
+			WelcomeWindow = new WelcomeWindow();
 			WelcomeWindow.setVisible(true);
+		} else {
+			LoginScreen = new LoginWindow();
+			LoginScreen.setVisible(true);
 		}
 		
-		LoginWindow LoginScreen = new LoginWindow();
-		LoginScreen.setVisible(true);
 	}
 	
 	// TODO Add a CF calculator
