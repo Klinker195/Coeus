@@ -12,7 +12,7 @@ import gui.GUIController;
 import objects.Person;
 import objects.Skill;
 
-public class PersonDAOPostgre {
+public class PersonDAOPostgre extends DAOPostgre {
 	
 	public PersonDAOPostgre() {
 		
@@ -33,31 +33,13 @@ public class PersonDAOPostgre {
 //		}
 //	}
 	
-	private void loadDriver() {
-		try {
-			Class.forName("org.postgresql.Driver");
-		} catch(ClassNotFoundException e) {
-			System.out.println("Class Not Found:\n " + e);
-		}
-	}
-
-	private Connection tryConnection() {
-		try {
-			Connection Conn = DriverManager.getConnection("jdbc:postgresql://coeusdb.c2p2pfdwi5ds.us-east-2.rds.amazonaws.com:5432/postgres", "postgres", "postgres");
-			return Conn;
-		} catch(SQLException e) {
-			System.out.println("SQL Exception:\n" + e);
-		}
-		return null;
-	}
-	
-	public LinkedList<Skill> getPersonSkill(String CF) {
+	public LinkedList<Skill> getPersonSkillsByCF(String CF) {
 		
 		loadDriver();
 		
 		try {
 			Connection Conn = tryConnection();
-			PreparedStatement PrepStm = Conn.prepareStatement("SELECT \"SkillID\", \"SkillName\" FROM \"PersonSkillID\" NATURAL JOIN \"Person\" NATURAL JOIN \"Skill\" WHERE \"PersonCF\" = ?");
+			PreparedStatement PrepStm = Conn.prepareStatement("SELECT \"SkillID\", \"SkillName\" FROM \"PersonSkill\" NATURAL JOIN \"Person\" NATURAL JOIN \"Skill\" WHERE \"PersonCF\" = ?");
 			PrepStm.setString(1, CF);
 			ResultSet Rs = PrepStm.executeQuery();
 			LinkedList<Skill> tmpList = new LinkedList<Skill>();
@@ -82,8 +64,7 @@ public class PersonDAOPostgre {
 			ResultSet Rs = Stm.executeQuery("SELECT * FROM public.\"Person\"");
 			LinkedList<Person> tmpList = new LinkedList<Person>();
 			while(Rs.next()) {
-				LinkedList<Skill> tmpSkillIdList = getPersonSkill(Rs.getString("PersonCF"));
-				tmpList.addLast(new Person(Rs.getString("PersonCF"), Rs.getString("PersonName"), Rs.getString("PersonSurname"), Rs.getFloat("PersonSalary"), tmpSkillIdList));
+				tmpList.addLast(new Person(Rs.getString("PersonCF"), Rs.getString("PersonName"), Rs.getString("PersonSurname"), Rs.getFloat("PersonSalary"), getPersonSkillsByCF(Rs.getString("PersonCF"))));
 			}
 			Conn.close();
 			return tmpList;
