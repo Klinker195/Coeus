@@ -33,10 +33,10 @@ public class LoginWindow extends JFrame {
 	private JPanel contentPane;
 	private JTextField UsernameTextField;
 	private JPasswordField passwordField;
-	GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-	int width = gd.getDisplayMode().getWidth();
-	int height = gd.getDisplayMode().getHeight();
-	GUIController GuiController = GUIController.getIstance();
+	private GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+	private int width = gd.getDisplayMode().getWidth();
+	private int height = gd.getDisplayMode().getHeight();
+	private GUIController GuiController = GUIController.getIstance();
 	
 
 	/**
@@ -54,7 +54,7 @@ public class LoginWindow extends JFrame {
 		contentPane.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(new Color(102, 102, 204));
+		panel.setBackground(new Color(153, 51, 51));
 		contentPane.add(panel);
 		panel.setLayout(new BorderLayout(0, 0));
 		
@@ -92,7 +92,7 @@ public class LoginWindow extends JFrame {
 				System.exit(0);
 			}
 		});
-		ExitButton.setBackground(new Color(102, 102, 204));
+		ExitButton.setBackground(new Color(153, 51, 51));
 		ExitButton.setHorizontalAlignment(SwingConstants.CENTER);
 		ExitButton.setFont(new Font("Roboto Bk", Font.BOLD, 22));
 		ExitButton.setForeground(new Color(255, 255, 255));
@@ -107,10 +107,10 @@ public class LoginWindow extends JFrame {
 		panel_1.add(panel_3, BorderLayout.SOUTH);
 		
 		JButton LoginButton = new JButton("Login");
-		LoginButton.setForeground(new Color(102, 102, 204));
+		LoginButton.setForeground(new Color(153, 51, 51));
 		LoginButton.setFont(new Font("Roboto", Font.PLAIN, 26));
-		LoginButton.setBackground(new Color(102, 102, 204));
-		LoginButton.setBorder(new LineBorder(new Color(102, 102, 204), 2, true));
+		LoginButton.setBackground(new Color(153, 51, 51));
+		LoginButton.setBorder(new LineBorder(new Color(153, 51, 51), 2, true));
 		LoginButton.setContentAreaFilled(false);
 		LoginButton.setPreferredSize(new Dimension(120, 30));
 		panel_3.add(LoginButton);

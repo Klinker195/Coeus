@@ -3,11 +3,15 @@ package gui;
 import java.util.LinkedList;
 
 import dao.PersonDAOPostgre;
+import dao.UserFounderDAOPostgre;
 import objects.Person;
 import objects.Skill;
+import dao.UserFounderDAO;
 
 public class GUIController {
 
+	private static UserFounderDAO UserFounderDAO = new UserFounderDAOPostgre();
+	
 	private static GUIController ControllerIstance = null;
 	
 	private GUIController() {
@@ -32,15 +36,18 @@ public class GUIController {
 	
 	public void start() {
 		
-		// if UserFounder resultset .next() returns false then the program doesn't have a founder so it has to do an extra step.
+		if(UserFounderDAO.isEmpty()) {
+			WelcomeWindow WelcomeWindow = new WelcomeWindow();
+			WelcomeWindow.setVisible(true);
+		}
 		
 		LoginWindow LoginScreen = new LoginWindow();
 		LoginScreen.setVisible(true);
 	}
 	
-	
-	public String calculateCF() {
-		
-	}
+	// TODO Add a CF calculator
+//	public String calculateCF() {
+//		
+//	}
 	
 }
