@@ -1,5 +1,11 @@
 package gui;
 
+import java.util.LinkedList;
+
+import dao.PersonDAOPostgre;
+import objects.Person;
+import objects.Skill;
+
 public class GUIController {
 
 	private static GUIController ControllerIstance = null;
@@ -13,6 +19,7 @@ public class GUIController {
 		GUIController GuiController = GUIController.getIstance();
 		
 		GuiController.start();
+
 		
 	}
 	

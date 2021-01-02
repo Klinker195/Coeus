@@ -6,6 +6,11 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="D:/Tutto Gianluca/Eclipse/GITHUB/Coeus/res/postgresql-42.2.18.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="res/auth.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
