@@ -18,20 +18,20 @@ public class PersonDAOPostgre {
 		
 	}
 	
-	public static void main(String args[]) {
-		
-		PersonDAOPostgre PersonDAO = new PersonDAOPostgre();
-		
-		LinkedList<Person> PersonList = PersonDAO.getAllPeople();
-		
-		for(Person p : PersonList) {
-			System.out.format(" CF: %s\n Name: %s\n Surname: %s\n Salary: %.2f\n Skill(s):\n", p.getPersonCF(), p.getPersonName(), p.getPersonSurname(), p.getPersonSalary());
-			LinkedList<Skill> tmp = p.getPersonSkillList();
-			for(Skill s : tmp) {
-				System.out.format(" - %s\n", s.getSkillName());
-			}
-		}
-	}
+//	public static void main(String args[]) {
+//		
+//		PersonDAOPostgre PersonDAO = new PersonDAOPostgre();
+//		
+//		LinkedList<Person> PersonList = PersonDAO.getAllPeople();
+//		
+//		for(Person p : PersonList) {
+//			System.out.format(" CF: %s\n Name: %s\n Surname: %s\n Salary: %.2f\n Skill(s):\n", p.getPersonCF(), p.getPersonName(), p.getPersonSurname(), p.getPersonSalary());
+//			LinkedList<Skill> tmp = p.getPersonSkillList();
+//			for(Skill s : tmp) {
+//				System.out.format(" - %s\n", s.getSkillName());
+//			}
+//		}
+//	}
 	
 	private void loadDriver() {
 		try {
