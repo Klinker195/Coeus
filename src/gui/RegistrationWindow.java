@@ -16,9 +16,15 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.border.LineBorder;
+import javax.swing.border.MatteBorder;
+
 import java.awt.GridLayout;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JTextField;
+import javax.swing.JFormattedTextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
 
 public class RegistrationWindow extends JFrame {
 
@@ -28,8 +34,9 @@ public class RegistrationWindow extends JFrame {
 	private int height = gd.getDisplayMode().getHeight();
 	private GUIController GuiController = GUIController.getIstance();
 	private JTextField textField;
-	private JTextField textField_1;
 	private JTextField textField_2;
+	private JTextField textField_1;
+	private JTextField textField_3;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -86,6 +93,10 @@ public class RegistrationWindow extends JFrame {
 		contentPane.add(panel_1, BorderLayout.SOUTH);
 		
 		JButton btnAvanti = new JButton("Next");
+		btnAvanti.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnAvanti.setPreferredSize(new Dimension(120, 30));
 		btnAvanti.setForeground(new Color(153, 51, 51));
 		btnAvanti.setFont(new Font("Roboto", Font.PLAIN, 26));
@@ -95,21 +106,24 @@ public class RegistrationWindow extends JFrame {
 		panel_1.add(btnAvanti);
 		
 		JPanel panel_2 = new JPanel();
+		panel_2.setBorder(null);
 		panel_2.setBackground(new Color(204, 153, 153));
 		contentPane.add(panel_2, BorderLayout.CENTER);
-		panel_2.setLayout(new MigLayout("", "[100px,grow,fill][20][100px,grow][100px,grow][100px,grow,fill]", "[][][15.00][][15.00][][][][]"));
+		panel_2.setLayout(new MigLayout("", "[100px,grow,fill][20][100px,grow][100px,grow][100px,grow,fill]", "[][25.00,fill][15.00][25.00][15.00][25.00][15.00][][]"));
 		
 		JLabel lblNewLabel_1 = new JLabel("Full Name");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		panel_2.add(lblNewLabel_1, "cell 0 0");
 		
 		textField = new JTextField();
-		panel_2.add(textField, "cell 0 1,growx");
+		textField.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
+		panel_2.add(textField, "cell 0 1,grow");
 		textField.setColumns(10);
 		
 		textField_1 = new JTextField();
-		panel_2.add(textField_1, "cell 2 1,growx");
 		textField_1.setColumns(10);
+		textField_1.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
+		panel_2.add(textField_1, "cell 2 1,grow");
 		
 		JLabel lblNewLabel_2 = new JLabel("First Name");
 		panel_2.add(lblNewLabel_2, "cell 0 2");
@@ -117,13 +131,16 @@ public class RegistrationWindow extends JFrame {
 		JLabel lblNewLabel_2_1 = new JLabel("Last Name");
 		panel_2.add(lblNewLabel_2_1, "cell 2 2");
 		
-		textField_2 = new JTextField();
-		textField_2.setText("01/01/1990");
-		textField_2.setToolTipText("01/01/1990");
-		textField_2.setColumns(10);
-		panel_2.add(textField_2, "cell 0 3,growx");
+		textField_3 = new JTextField();
+		textField_3.setColumns(10);
+		textField_3.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
+		panel_2.add(textField_3, "cell 0 3,grow");
 		
-		JLabel lblNewLabel_2_2 = new JLabel("Birthdate");
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
+		panel_2.add(comboBox, "cell 2 3,grow");
+		
+		JLabel lblNewLabel_2_2 = new JLabel("Birthdate (Ex: 01/01/1990)");
 		panel_2.add(lblNewLabel_2_2, "cell 0 4");
 	}
 
