@@ -126,9 +126,11 @@ public class RegistrationWindow extends JFrame {
 		panel_2.add(textField_1, "cell 2 1,grow");
 		
 		JLabel lblNewLabel_2 = new JLabel("First Name");
+		lblNewLabel_2.setForeground(Color.GRAY);
 		panel_2.add(lblNewLabel_2, "cell 0 2");
 		
 		JLabel lblNewLabel_2_1 = new JLabel("Last Name");
+		lblNewLabel_2_1.setForeground(Color.GRAY);
 		panel_2.add(lblNewLabel_2_1, "cell 2 2");
 		
 		textField_3 = new JTextField();
@@ -141,6 +143,7 @@ public class RegistrationWindow extends JFrame {
 		panel_2.add(comboBox, "cell 2 3,grow");
 		
 		JLabel lblNewLabel_2_2 = new JLabel("Birthdate (Ex: 01/01/1990)");
+		lblNewLabel_2_2.setForeground(Color.GRAY);
 		panel_2.add(lblNewLabel_2_2, "cell 0 4");
 	}
 
