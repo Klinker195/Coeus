@@ -5,12 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import objects.Person;
 import objects.Skill;
 
-public class WorldStatesDAOPostgre extends DAOPostgre {
+public class WorldStatesDAOPostgre extends DAOPostgre implements WorldStatesDAO {
 
 	public WorldStatesDAOPostgre() {
 		
@@ -18,9 +19,9 @@ public class WorldStatesDAOPostgre extends DAOPostgre {
 	
 //	public static void main(String args[]) {
 //		
-//		WorldStatesDAOPostgre WorldStatesDAO = new WorldStatesDAOPostgre();
+//		WorldStatesDAO WorldStatesDAO = new WorldStatesDAOPostgre();
 //		
-//		LinkedList<String> StateNamesList = WorldStatesDAO.getAllStates();
+//		ArrayList<String> StateNamesList = WorldStatesDAO.getAllStates();
 //		
 //		System.out.format(" [LISTA NAZIONI]\n");
 //		for(String s : StateNamesList) {
@@ -30,7 +31,8 @@ public class WorldStatesDAOPostgre extends DAOPostgre {
 //	}
 	
 	
-	public LinkedList<String> getAllStates() {
+	@Override
+	public ArrayList<String> getAllStates() {
 		
 		loadDriver();
 		
@@ -38,9 +40,9 @@ public class WorldStatesDAOPostgre extends DAOPostgre {
 			Connection Conn = tryConnection();
 			Statement Stm = Conn.createStatement();
 			ResultSet Rs = Stm.executeQuery("SELECT \"StateName\" FROM \"WorldStates\"");
-			LinkedList<String> tmpList = new LinkedList<String>();
+			ArrayList<String> tmpList = new ArrayList<String>();
 			while(Rs.next()) {
-				tmpList.addLast(Rs.getString("StateName"));
+				tmpList.add(Rs.getString("StateName"));
 			}
 			Conn.close();
 			return tmpList;
