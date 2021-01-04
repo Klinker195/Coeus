@@ -8,8 +8,8 @@ public class User extends Person {
 	private String UserPassword;
 	private String UserEmail;
 	
-	public User(String PersonCF, String PersonName, String PersonSurname, float PersonSalary, LinkedList<Skill> PersonSkills, int UserID, String UserPassword, String UserEmail) {
-		super(PersonCF, PersonName, PersonSurname, PersonSalary, PersonSkills);
+	public User(String PersonCF, String PersonName, String PersonSurname, float PersonSalary, String PersonTimeZone, LinkedList<Skill> PersonSkills, int UserID, String UserPassword, String UserEmail) {
+		super(PersonCF, PersonName, PersonSurname, PersonSalary, PersonTimeZone, PersonSkills);
 		this.UserID = UserID;
 		this.UserPassword = UserPassword;
 		this.UserEmail = UserEmail;
