@@ -33,6 +33,8 @@ public class PersonDAOPostgre extends DAOPostgre {
 //		}
 //	}
 	
+	
+	// TODO Assolutamente da correggere questo getter, dovrebbe stare in SkillDAOPostgre, in PersonDAOPostgre bisognerebbe dichiarare un oggetto SkillDAOPostgre per effettuare l'accesso alle skill.
 	public LinkedList<Skill> getPersonSkillsByCF(String CF) {
 		
 		loadDriver();
@@ -64,7 +66,8 @@ public class PersonDAOPostgre extends DAOPostgre {
 			ResultSet Rs = Stm.executeQuery("SELECT * FROM public.\"Person\"");
 			LinkedList<Person> tmpList = new LinkedList<Person>();
 			while(Rs.next()) {
-				tmpList.addLast(new Person(Rs.getString("PersonCF"), Rs.getString("PersonName"), Rs.getString("PersonSurname"), Rs.getFloat("PersonSalary"), getPersonSkillsByCF(Rs.getString("PersonCF"))));
+				// Non va bene il getter delle skill, controllare il metodo
+				tmpList.addLast(new Person(Rs.getString("PersonCF"), Rs.getString("PersonName"), Rs.getString("PersonSurname"), Rs.getFloat("PersonSalary"), Rs.getString("PersonTimeZone"),getPersonSkillsByCF(Rs.getString("PersonCF"))));
 			}
 			Conn.close();
 			return tmpList;

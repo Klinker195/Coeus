@@ -8,8 +8,7 @@ public class Meeting {
 	String MettingEndingTime;
 	int MeetingProjID;
 	
-	public Meeting(int MeetingID, String MettingDate, String MettingStartingTime, String MettingEndingTime,
-			int MeetingProjID) {
+	public Meeting(int MeetingID, String MettingDate, String MettingStartingTime, String MettingEndingTime, int MeetingProjID) {
 		super();
 		this.MeetingID = MeetingID;
 		this.MettingDate = MettingDate;

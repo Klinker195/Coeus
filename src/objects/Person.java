@@ -8,14 +8,16 @@ public class Person {
 	private String PersonName;
 	private String PersonSurname;
 	private float PersonSalary;
-	LinkedList<Skill> PersonSkills;
+	private String PersonTimeZone;
+	private LinkedList<Skill> PersonSkills;
 	
-	public Person(String PersonCF, String PersonName, String PersonSurname, float PersonSalary, LinkedList<Skill> PersonSkills) {
+	public Person(String PersonCF, String PersonName, String PersonSurname, float PersonSalary, String PersonTimeZone,LinkedList<Skill> PersonSkills) {
 		super();
 		this.PersonCF = PersonCF;
 		this.PersonName = PersonName;
 		this.PersonSurname = PersonSurname;
 		this.PersonSalary = PersonSalary;
+		this.PersonTimeZone = PersonTimeZone;
 		this.PersonSkills = PersonSkills;
 	}
 
@@ -49,6 +51,14 @@ public class Person {
 
 	public void setPersonSalary(float personSalary) {
 		PersonSalary = personSalary;
+	}
+	
+	public String getPersonTimeZone() {
+		return PersonTimeZone;
+	}
+
+	public void setPersonTimeZone(float personTimeZone) {
+		PersonSalary = personTimeZone;
 	}
 	
 	public LinkedList<Skill> getPersonSkillList() {
