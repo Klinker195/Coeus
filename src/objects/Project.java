@@ -2,60 +2,83 @@ package objects;
 
 public class Project {
 	
-	int ProjID;
-	String ProjName;
-	String ProjDescription;
-	String ProjType;
-	String ProjScope;
-	int ProjMaxEmployee;
+	int ID;
+	String Name;
+	String Description;
+	String Type;
+	String Scope;
+	int MaxEmployee;
 	
 	
-	public Project(int ProjID, String ProjName, String ProjDescription,String ProjType,
-			String ProjScope, int ProjMaxEmployee) {
+	public Project(int ID, String Name, String Description,String Type,
+			String Scope, int MaxEmployee) {
 		super();
-		this.ProjID = ProjID;
-		this.ProjName = ProjName;
-		this.ProjDescription = ProjDescription;
-		this.ProjType = ProjType;
-		this.ProjScope = ProjScope;
-		this.ProjMaxEmployee = ProjMaxEmployee;
+		this.ID = ID;
+		this.Name = Name;
+		this.Description = Description;
+		this.Type = Type;
+		this.Scope = Scope;
+		this.MaxEmployee = MaxEmployee;
 	}
-	
-	public int getProjID() {
-		return ProjID;
+
+
+	public int getID() {
+		return ID;
 	}
-	public void setProjID(int projID) {
-		ProjID = projID;
+
+
+	public void setID(int iD) {
+		ID = iD;
 	}
-	public String getProjName() {
-		return ProjName;
+
+
+	public String getName() {
+		return Name;
 	}
-	public void setProjName(String projName) {
-		ProjName = projName;
+
+
+	public void setName(String name) {
+		Name = name;
 	}
-	public String getProjDescription() {
-		return ProjDescription;
+
+
+	public String getDescription() {
+		return Description;
 	}
-	public void setProjDescription(String projDescription) {
-		ProjDescription = projDescription;
+
+
+	public void setDescription(String description) {
+		Description = description;
 	}
-	public String getProjType() {
-		return ProjType;
+
+
+	public String getType() {
+		return Type;
 	}
-	public void setProjType(String projType) {
-		ProjType = projType;
+
+
+	public void setType(String type) {
+		Type = type;
 	}
-	public String getProjScope() {
-		return ProjScope;
+
+
+	public String getScope() {
+		return Scope;
 	}
-	public void setProjScope(String projScope) {
-		ProjScope = projScope;
+
+
+	public void setScope(String scope) {
+		Scope = scope;
 	}
-	public int getProjMaxEmployee() {
-		return ProjMaxEmployee;
+
+
+	public int getMaxEmployee() {
+		return MaxEmployee;
 	}
-	public void setProjMaxEmployee(int projMaxEmployee) {
-		ProjMaxEmployee = projMaxEmployee;
+
+
+	public void setMaxEmployee(int maxEmployee) {
+		MaxEmployee = maxEmployee;
 	}
 		
 }

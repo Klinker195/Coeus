@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 
 import gui.GUIController;
-import objects.Person;
+import objects.Employee;
 import objects.Skill;
 
 public class PersonDAOPostgre extends DAOPostgre {
@@ -41,12 +41,12 @@ public class PersonDAOPostgre extends DAOPostgre {
 		
 		try {
 			Connection Conn = tryConnection();
-			PreparedStatement PrepStm = Conn.prepareStatement("SELECT \"SkillID\", \"SkillName\" FROM \"PersonSkill\" NATURAL JOIN \"Person\" NATURAL JOIN \"Skill\" WHERE \"PersonCF\" = ?");
+			PreparedStatement PrepStm = Conn.prepareStatement("SELECT \"Skill\".\"ID\", \"Skill\".\"Name\" FROM \"EmployeeSkill\" NATURAL JOIN \"Employee\" NATURAL JOIN \"Skill\" WHERE \"CF\" = ?");
 			PrepStm.setString(1, CF);
 			ResultSet Rs = PrepStm.executeQuery();
 			LinkedList<Skill> tmpList = new LinkedList<Skill>();
 			while(Rs.next()) {
-				tmpList.addLast(new Skill(Rs.getInt("SkillID"), Rs.getString("SkillName")));
+				tmpList.addLast(new Skill(Rs.getInt("ID"), Rs.getString("Name")));
 			}
 			Conn.close();
 			return tmpList;
@@ -56,18 +56,18 @@ public class PersonDAOPostgre extends DAOPostgre {
 		return null;
 	}
 	
-	public LinkedList<Person> getAllPeople() {
+	public LinkedList<Employee> getAllPeople() {
 		
 		loadDriver();
 		
 		try {
 			Connection Conn = tryConnection();
 			Statement Stm = Conn.createStatement();
-			ResultSet Rs = Stm.executeQuery("SELECT * FROM public.\"Person\"");
-			LinkedList<Person> tmpList = new LinkedList<Person>();
+			ResultSet Rs = Stm.executeQuery("SELECT * FROM public.\"Employee\"");
+			LinkedList<Employee> tmpList = new LinkedList<Employee>();
 			while(Rs.next()) {
 				// Non va bene il getter delle skill, controllare il metodo
-				tmpList.addLast(new Person(Rs.getString("PersonCF"), Rs.getString("PersonName"), Rs.getString("PersonSurname"), Rs.getFloat("PersonSalary"), Rs.getString("PersonTimeZone"),getPersonSkillsByCF(Rs.getString("PersonCF"))));
+				tmpList.addLast(new Employee(Rs.getString("CF"), Rs.getString("Name"), Rs.getString("Surname"), Rs.getFloat("Salary"), Rs.getString("TimeZone"),getPersonSkillsByCF(Rs.getString("CF"))));
 			}
 			Conn.close();
 			return tmpList;

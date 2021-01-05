@@ -2,29 +2,29 @@ package objects;
 
 public class Skill {
 
-	private int SkillID;
-	private String SkillName;
+	private int ID;
+	private String Name;
 	
-	public Skill(int SkillID, String SkillName) {
+	public Skill(int ID, String Name) {
 		super();
-		this.SkillID = SkillID;
-		this.SkillName = SkillName;
+		this.ID = ID;
+		this.Name = Name;
 	}
 
-	public int getSkillID() {
-		return SkillID;
+	public int getID() {
+		return ID;
 	}
 
-	public void setSkillID(int skillID) {
-		SkillID = skillID;
+	public void setID(int iD) {
+		ID = iD;
 	}
 
-	public String getSkillName() {
-		return SkillName;
+	public String getName() {
+		return Name;
 	}
 
-	public void setSkillName(String skillName) {
-		SkillName = skillName;
+	public void setName(String name) {
+		Name = name;
 	}
 	
 }

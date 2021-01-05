@@ -4,9 +4,9 @@ import java.util.LinkedList;
 
 public class UserAdmin extends User {
 
-	public UserAdmin(String PersonCF, String PersonName, String PersonSurname, float PersonSalary,
-			String PersonTimeZone, LinkedList<Skill> PersonSkills, int UserID, String UserPassword, String UserEmail) {
-		super(PersonCF, PersonName, PersonSurname, PersonSalary, PersonTimeZone, PersonSkills, UserID, UserPassword, UserEmail);
+	public UserAdmin(String CF, String Name, String Surname, float Salary,
+			String TimeZone, LinkedList<Skill> Skill, int UserID, String Password, String Email) {
+		super(CF, Name, Surname, Salary, TimeZone, Skill, UserID, Password, Email);
 	}
 	
 }

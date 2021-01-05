@@ -68,7 +68,7 @@ public class GUIController {
 		
 		switch(Month) {
 		case "February":
-			if(IntYear % 4 == 0 && IntYear % 100 != 0) {
+			if(IntYear % 4 == 0 && IntYear % 100 != 0 || IntYear % 400 == 0) {
 				JComboBox.setModel(new DefaultComboBoxModel(intervalToStringArray(1, 29)));
 			} else {
 				JComboBox.setModel(new DefaultComboBoxModel(intervalToStringArray(1, 28)));
