@@ -2,7 +2,7 @@ package dao;
 
 import java.util.ArrayList;
 
-public interface WorldStatesDAO {
+public interface WorldStateDAO {
 
 	ArrayList<String> getAllStates();
 

@@ -32,7 +32,7 @@ public class Controller {
 	private int DisplayHeight = GraphicDisplay.getDisplayMode().getHeight();
 	
 	private UserFounderDAO UserFounderDAO = new UserFounderDAOPostgre();
-	private WorldStatesDAO WorldStatesDAO = new WorldStateDAOPostgre();
+	private WorldStateDAO WorldStatesDAO = new WorldStateDAOPostgre();
 	
 	private LoginWindow LoginWindow;
 	private WelcomeWindow WelcomeWindow;

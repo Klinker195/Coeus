@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import entities.Employee;
 import entities.Skill;
 
-public class WorldStateDAOPostgre extends DAOPostgre implements WorldStatesDAO {
+public class WorldStateDAOPostgre extends DAOPostgre implements WorldStateDAO {
 
 	public WorldStateDAOPostgre() {
 		
