@@ -27,128 +27,116 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-public class LoginWindow extends JFrame {
+import controller.Controller;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
+public class LoginWindow extends GenericFrame {
 
-	private JPanel contentPane;
-	private JTextField UsernameTextField;
-	private JPasswordField passwordField;
-	private GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-	private int width = gd.getDisplayMode().getWidth();
-	private int height = gd.getDisplayMode().getHeight();
-	private GUIController GuiController = GUIController.getIstance();
+	private Controller MainController = Controller.getIstance();
 	
-	public LoginWindow() {
-		setResizable(false);
-		setUndecorated(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 600, 400);
-		setBounds(width/2 - 300, height/2 - 200, 600, 400);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
-		setContentPane(contentPane);
-		contentPane.setLayout(new GridLayout(1, 0, 0, 0));
+	private JPanel MainPanel;
+	
+	private JTextField UsernameJTextField;
+	private JPasswordField PasswordField;
+	
+	private JButton ExitButton;
+	private JButton LoginButton;
+	
+	
+	public LoginWindow(int DisplayWidth, int DisplayHeight) {
+		setDefaultDesign(this);
+		setBounds(DisplayWidth/2 - 300, DisplayHeight/2 - 200, 600, 400);
+		MainPanel = new JPanel();
+		setDefaultBorderDesign(MainPanel);
+		setContentPane(MainPanel);
+		MainPanel.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JPanel panel = new JPanel();
-		panel.setBackground(new Color(153, 51, 51));
-		contentPane.add(panel);
-		panel.setLayout(new BorderLayout(0, 0));
+		JPanel LeftPanel = new JPanel();
+		LeftPanel.setBackground(new Color(153, 51, 51));
+		MainPanel.add(LeftPanel);
+		LeftPanel.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		lblNewLabel.setIcon(new ImageIcon(LoginWindow.class.getResource("/loginAuth.png")));
-		panel.add(lblNewLabel, BorderLayout.CENTER);
+		JLabel AuthImageLabel = new JLabel("");
+		AuthImageLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		AuthImageLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		AuthImageLabel.setIcon(new ImageIcon(LoginWindow.class.getResource("/loginAuth.png")));
+		LeftPanel.add(AuthImageLabel, BorderLayout.CENTER);
 		
-		JLabel lblNewLabel_1 = new JLabel("Authentication");
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setForeground(Color.WHITE);
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 24));
-		panel.add(lblNewLabel_1, BorderLayout.SOUTH);
+		JLabel AuthenticationLabel = new JLabel("Authentication");
+		AuthenticationLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		AuthenticationLabel.setForeground(Color.WHITE);
+		AuthenticationLabel.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		LeftPanel.add(AuthenticationLabel, BorderLayout.SOUTH);
 		
-		JPanel panel_1 = new JPanel();
-		contentPane.add(panel_1);
-		panel_1.setLayout(new BorderLayout(0, 0));
+		JPanel RightPanel = new JPanel();
+		MainPanel.add(RightPanel);
+		RightPanel.setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel_2 = new JPanel();
-		FlowLayout flowLayout_1 = (FlowLayout) panel_2.getLayout();
-		flowLayout_1.setAlignment(FlowLayout.RIGHT);
-		flowLayout_1.setHgap(0);
-		flowLayout_1.setVgap(0);
-		panel_1.add(panel_2, BorderLayout.NORTH);
+		JPanel TopRightBarPanel = new JPanel();
+		FlowLayout fl_TopRightBarPanel = (FlowLayout) TopRightBarPanel.getLayout();
+		fl_TopRightBarPanel.setAlignment(FlowLayout.RIGHT);
+		fl_TopRightBarPanel.setHgap(0);
+		fl_TopRightBarPanel.setVgap(0);
+		RightPanel.add(TopRightBarPanel, BorderLayout.NORTH);
 		
-		JLabel ExitButton = new JLabel("X");
-		ExitButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				ExitButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.exit(0);
+		ExitButton = new JButton();
+		ExitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			System.exit(0);
 			}
 		});
-		ExitButton.setBackground(new Color(153, 51, 51));
-		ExitButton.setHorizontalAlignment(SwingConstants.CENTER);
-		ExitButton.setFont(new Font("Roboto Bk", Font.BOLD, 22));
-		ExitButton.setForeground(new Color(255, 255, 255));
-		ExitButton.setPreferredSize(new Dimension(35, 35));
-		ExitButton.setOpaque(true);
-		panel_2.add(ExitButton);
+		setDefaultExitButtonDesign(ExitButton);
+		TopRightBarPanel.add(ExitButton);
 		
-		JPanel panel_3 = new JPanel();
-		FlowLayout flowLayout_3 = (FlowLayout) panel_3.getLayout();
-		flowLayout_3.setVgap(20);
-		flowLayout_3.setHgap(20);
-		panel_1.add(panel_3, BorderLayout.SOUTH);
+		JPanel LoginButtonPanel = new JPanel();
+		FlowLayout fl_LoginButtonPanel = (FlowLayout) LoginButtonPanel.getLayout();
+		fl_LoginButtonPanel.setVgap(20);
+		fl_LoginButtonPanel.setHgap(20);
+		RightPanel.add(LoginButtonPanel, BorderLayout.SOUTH);
 		
 		JButton LoginButton = new JButton("Login");
-		LoginButton.setForeground(new Color(153, 51, 51));
-		LoginButton.setFont(new Font("Roboto", Font.PLAIN, 26));
-		LoginButton.setBackground(new Color(153, 51, 51));
-		LoginButton.setBorder(new LineBorder(new Color(153, 51, 51), 2, true));
-		LoginButton.setContentAreaFilled(false);
-		LoginButton.setPreferredSize(new Dimension(120, 30));
-		panel_3.add(LoginButton);
+		setDefaultLineBorderButtonDesign(LoginButton);
+		LoginButtonPanel.add(LoginButton);
 		
-		JPanel panel_4 = new JPanel();
-		panel_1.add(panel_4, BorderLayout.CENTER);
-		panel_4.setLayout(new BorderLayout(10, 10));
+		JPanel SignUpPanel = new JPanel();
+		RightPanel.add(SignUpPanel, BorderLayout.CENTER);
+		SignUpPanel.setLayout(new BorderLayout(10, 10));
 		
 		JLabel SignUpLabel = new JLabel("Sign Up");
 		SignUpLabel.setFont(new Font("Roboto Lt", Font.PLAIN, 34));
 		SignUpLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_4.add(SignUpLabel, BorderLayout.NORTH);
+		SignUpPanel.add(SignUpLabel, BorderLayout.NORTH);
 		
-		JPanel panel_5 = new JPanel();
-		FlowLayout flowLayout_2 = (FlowLayout) panel_5.getLayout();
-		flowLayout_2.setVgap(10);
-		flowLayout_2.setHgap(10);
-		panel_4.add(panel_5, BorderLayout.CENTER);
+		JPanel UserInformationsPanel = new JPanel();
+		FlowLayout fl_UserInformationsPanel = (FlowLayout) UserInformationsPanel.getLayout();
+		fl_UserInformationsPanel.setVgap(10);
+		fl_UserInformationsPanel.setHgap(10);
+		SignUpPanel.add(UserInformationsPanel, BorderLayout.CENTER);
 		
 		JLabel UsernameLabel = new JLabel("Username");
 		UsernameLabel.setForeground(Color.DARK_GRAY);
 		UsernameLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		UsernameLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
 		UsernameLabel.setPreferredSize(new Dimension(200, 20));
-		panel_5.add(UsernameLabel);
+		UserInformationsPanel.add(UsernameLabel);
 		
-		UsernameTextField = new JTextField();
-		UsernameTextField.setFont(new Font("Roboto", Font.PLAIN, 14));
-		UsernameTextField.setPreferredSize(new Dimension(200, 30));
-		panel_5.add(UsernameTextField);
+		UsernameJTextField = new JTextField();
+		UsernameJTextField.setFont(new Font("Roboto", Font.PLAIN, 14));
+		UsernameJTextField.setPreferredSize(new Dimension(200, 30));
+		UserInformationsPanel.add(UsernameJTextField);
 		
 		JLabel PasswordLabel = new JLabel("Password");
 		PasswordLabel.setForeground(Color.DARK_GRAY);
 		PasswordLabel.setPreferredSize(new Dimension(200, 20));
 		PasswordLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		PasswordLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
-		panel_5.add(PasswordLabel);
+		UserInformationsPanel.add(PasswordLabel);
 		
-		passwordField = new JPasswordField();
-		passwordField.setFont(new Font("Roboto", Font.PLAIN, 14));
-		passwordField.setPreferredSize(new Dimension(200, 30));
-		panel_5.add(passwordField);
+		PasswordField = new JPasswordField();
+		PasswordField.setFont(new Font("Roboto", Font.PLAIN, 14));
+		PasswordField.setPreferredSize(new Dimension(200, 30));
+		UserInformationsPanel.add(PasswordField);
 	}
 	
 	private Image getImage(String filename) {

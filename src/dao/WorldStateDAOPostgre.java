@@ -8,12 +8,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import objects.Employee;
-import objects.Skill;
+import entities.Employee;
+import entities.Skill;
 
-public class WorldStatesDAOPostgre extends DAOPostgre implements WorldStatesDAO {
+public class WorldStateDAOPostgre extends DAOPostgre implements WorldStatesDAO {
 
-	public WorldStatesDAOPostgre() {
+	public WorldStateDAOPostgre() {
 		
 	}
 	
@@ -39,7 +39,7 @@ public class WorldStatesDAOPostgre extends DAOPostgre implements WorldStatesDAO 
 		try {
 			Connection Conn = tryConnection();
 			Statement Stm = Conn.createStatement();
-			ResultSet Rs = Stm.executeQuery("SELECT \"Name\" FROM \"WorldStates\"");
+			ResultSet Rs = Stm.executeQuery("SELECT \"Name\" FROM \"WorldState\"");
 			ArrayList<String> tmpList = new ArrayList<String>();
 			while(Rs.next()) {
 				tmpList.add(Rs.getString("Name"));

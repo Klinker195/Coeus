@@ -8,9 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 
-import gui.GUIController;
-import objects.Employee;
-import objects.Skill;
+import controller.Controller;
+import entities.Employee;
+import entities.Skill;
 
 public class PersonDAOPostgre extends DAOPostgre {
 	
@@ -34,7 +34,7 @@ public class PersonDAOPostgre extends DAOPostgre {
 //	}
 	
 	
-	// TODO Assolutamente da correggere questo getter, dovrebbe stare in SkillDAOPostgre, in PersonDAOPostgre bisognerebbe dichiarare un oggetto SkillDAOPostgre per effettuare l'accesso alle skill.
+	// TODO MUST adjust this getter, it should be in SkillDAOPostgre, this object should call the controller to make the query from SkillDAOPostgre class.
 	public LinkedList<Skill> getPersonSkillsByCF(String CF) {
 		
 		loadDriver();

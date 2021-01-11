@@ -7,15 +7,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 
-public class ItalianDistrictsDAOPostgre extends DAOPostgre {
+public class ItalianDistrictDAOPostgre extends DAOPostgre {
 
-	public ItalianDistrictsDAOPostgre() {
+	public ItalianDistrictDAOPostgre() {
 		
 	}
 	
 	public static void main(String args[]) {
 	
-		ItalianDistrictsDAOPostgre ItalianDistrictsDAO = new ItalianDistrictsDAOPostgre();
+		ItalianDistrictDAOPostgre ItalianDistrictsDAO = new ItalianDistrictDAOPostgre();
 	
 	LinkedList<String> RegionNamesList = ItalianDistrictsDAO.getAllRegionNames();
 	
@@ -51,7 +51,7 @@ public class ItalianDistrictsDAOPostgre extends DAOPostgre {
 		try {
 			Connection Conn = tryConnection();
 			Statement Stm = Conn.createStatement();
-			ResultSet Rs = Stm.executeQuery("SELECT \"RegionName\" FROM \"ItalianDistricts\" GROUP BY \"RegionName\"");
+			ResultSet Rs = Stm.executeQuery("SELECT \"RegionName\" FROM \"ItalianDistrict\" GROUP BY \"RegionName\"");
 			LinkedList<String> tmpList = new LinkedList<String>();
 			while(Rs.next()) {
 				tmpList.addLast(Rs.getString("RegionName"));

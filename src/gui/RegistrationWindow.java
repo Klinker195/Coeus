@@ -21,6 +21,7 @@ import javax.swing.JButton;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
+import controller.Controller;
 import exceptions.IntervalException;
 
 import java.awt.GridLayout;
@@ -39,17 +40,26 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSeparator;
 
-public class RegistrationWindow extends JFrame {
+public class RegistrationWindow extends GenericFrame {
 
-	private JPanel contentPane;
-	private GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-	private int width = gd.getDisplayMode().getWidth();
-	private int height = gd.getDisplayMode().getHeight();
-	private GUIController GuiController = GUIController.getIstance();
-	private JTextField textField_2;
+	private Controller MainController = Controller.getIstance();
+	
+	private JPanel MainPanel;
+
 	private JTextField FirstNameTextField;
 	private JTextField LastNameTextField;
-	private JTextField textField_3;
+	private JTextField CFTextField;
+	
+	private JComboBox<Integer> DayJComboBox;
+	private JComboBox<String> MonthJComboBox;
+	private JComboBox<Integer> YearJComboBox;
+	private JComboBox<String> StateOfBirthJComboBox;
+	private JComboBox<String> RegionJComboBox;
+	private JComboBox<String> CityOfBirthJComboBox;
+	private JComboBox<String> TimeZoneJComboBox;
+	
+	private JButton NextButton;
+	private JButton ExitButton;
 	
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
@@ -65,139 +75,127 @@ public class RegistrationWindow extends JFrame {
 //	}
 
 	
-	public RegistrationWindow(String[] WorldStates) throws IntervalException {
-		setResizable(false);
-		setUndecorated(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(width/2 - 340, height/2 - 450, 680, 900);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
-		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
+	public RegistrationWindow(int DisplayWidth, int DisplayHeight, String[] WorldStates) throws IntervalException {
+		setBounds(DisplayWidth/2 - 340, DisplayHeight/2 - 450, 680, 900);
+		MainPanel = new JPanel();
+		setDefaultBorderDesign(MainPanel);
+		setDefaultDesign(this);
+		setContentPane(MainPanel);
+		MainPanel.setLayout(new BorderLayout(0, 0));
 		
 		JPanel TopPanel = new JPanel();
-		contentPane.add(TopPanel, BorderLayout.NORTH);
+		MainPanel.add(TopPanel, BorderLayout.NORTH);
 		TopPanel.setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel_3 = new JPanel();
-		FlowLayout flowLayout_1 = (FlowLayout) panel_3.getLayout();
-		flowLayout_1.setVgap(0);
-		flowLayout_1.setHgap(0);
-		TopPanel.add(panel_3, BorderLayout.WEST);
+		JPanel TitlePanel = new JPanel();
+		FlowLayout fl_TitlePanel = (FlowLayout) TitlePanel.getLayout();
+		fl_TitlePanel.setVgap(0);
+		fl_TitlePanel.setHgap(0);
+		TopPanel.add(TitlePanel, BorderLayout.WEST);
 		
-		JLabel lblNewLabel = new JLabel("Coeus");
-		lblNewLabel.setForeground(new Color(153, 51, 51));
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 70));
-		panel_3.add(lblNewLabel);
+		JLabel CoeusLabel = new JLabel("Coeus");
+		CoeusLabel.setForeground(new Color(153, 51, 51));
+		CoeusLabel.setFont(new Font("Tahoma", Font.PLAIN, 70));
+		TitlePanel.add(CoeusLabel);
 		
-		JPanel panel_4 = new JPanel();
-		FlowLayout flowLayout = (FlowLayout) panel_4.getLayout();
-		flowLayout.setVgap(0);
-		flowLayout.setHgap(0);
-		TopPanel.add(panel_4, BorderLayout.EAST);
+		JPanel RightPanel = new JPanel();
+		FlowLayout fl_RightPanel = (FlowLayout) RightPanel.getLayout();
+		fl_RightPanel.setVgap(0);
+		fl_RightPanel.setHgap(0);
+		TopPanel.add(RightPanel, BorderLayout.EAST);
 		
-		JLabel ExitButton = new JLabel("X");
-		ExitButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				ExitButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			}
-			@Override
-			public void mouseClicked(MouseEvent e) {
+		
+		ExitButton = new JButton();
+		ExitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				System.exit(0);
 			}
 		});
-		ExitButton.setPreferredSize(new Dimension(35, 35));
-		ExitButton.setOpaque(true);
-		ExitButton.setHorizontalAlignment(SwingConstants.CENTER);
-		ExitButton.setForeground(Color.WHITE);
-		ExitButton.setFont(new Font("Roboto Bk", Font.BOLD, 22));
-		ExitButton.setBackground(new Color(153, 51, 51));
-		panel_4.add(ExitButton);
+		setDefaultExitButtonDesign(ExitButton);
+		RightPanel.add(ExitButton);
 		
 		JPanel BottomPanel = new JPanel();
-		contentPane.add(BottomPanel, BorderLayout.SOUTH);
+		MainPanel.add(BottomPanel, BorderLayout.SOUTH);
 		
-		JButton btnAvanti = new JButton("Next");
-		btnAvanti.addActionListener(new ActionListener() {
+		NextButton = new JButton("Next");
+		NextButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				if(FirstNameTextField.getSelectedText() != null) {
+					if(FirstNameTextField.getSelectedText().isBlank() || LastNameTextField.getSelectedText().isBlank() || CFTextField.getSelectedText().isBlank()) {
+						MainController.displayMessageDialog("Error!", "Error: One or more text fields are missing! Please make sure to fill all the fields.");
+					} else {
+						System.exit(0); // Temporary
+					}
+				} else {
+					MainController.displayMessageDialog("Error!", "Error: One or more text fields are missing! Please make sure to fill all the fields.");
+				}
 			}
 		});
-		btnAvanti.setPreferredSize(new Dimension(120, 30));
-		btnAvanti.setForeground(new Color(153, 51, 51));
-		btnAvanti.setFont(new Font("Roboto", Font.PLAIN, 26));
-		btnAvanti.setContentAreaFilled(false);
-		btnAvanti.setBorder(new LineBorder(new Color(153, 51, 51), 2, true));
-		btnAvanti.setBackground(new Color(153, 51, 51));
-		BottomPanel.add(btnAvanti);
+		setDefaultLineBorderButtonDesign(NextButton);
+		BottomPanel.add(NextButton);
 		
 		JPanel CentralPanel = new JPanel();
 		CentralPanel.setBorder(null);
-		CentralPanel.setBackground(new Color(166, 111, 111));
-		contentPane.add(CentralPanel, BorderLayout.EAST);
+		setDefaultBackgroundDesign(CentralPanel);
+		MainPanel.add(CentralPanel, BorderLayout.CENTER);
 		
 		JLabel FullNameLabel = new JLabel("Full Name");
-		FullNameLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
+		setDefaultHeaderTextLabel(FullNameLabel);
 		
 		FirstNameTextField = new JTextField();
-		FirstNameTextField.setColumns(10);
-		FirstNameTextField.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
+		setDefaultJTextFieldDesign(FirstNameTextField);
 		
 		JLabel FirstNameLabel = new JLabel("First Name");
-		FirstNameLabel.setForeground(new Color(122, 72, 72));
+		setDefaultBackgroundTextLabel(FirstNameLabel);
 		
 		JLabel LastNameLabel = new JLabel("Last Name");
-		LastNameLabel.setForeground(new Color(122, 72, 72));
+		setDefaultBackgroundTextLabel(LastNameLabel);
 		
 		JLabel DetailsLabel = new JLabel("Details");
-		DetailsLabel.setFont(new Font("Tahoma", Font.BOLD, 16));
+		setDefaultHeaderTextLabel(DetailsLabel);
 		
 		LastNameTextField = new JTextField();
-		LastNameTextField.setColumns(10);
-		LastNameTextField.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
+		setDefaultJTextFieldDesign(LastNameTextField);
 		
 		JLabel DataPrivacyLabel = new JLabel("None of these informations will be stored, the data will only be used to calculate your CF.");
-		DataPrivacyLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
-		DataPrivacyLabel.setForeground(new Color(122, 72, 72));
+		setDefaultBackgroundTextLabel(DataPrivacyLabel);
 		
 		JLabel BirthdateLabel = new JLabel("Birthdate");
-		BirthdateLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		setDefaultTextLabel(BirthdateLabel);
 		
 		JLabel StateOfBirthLabel = new JLabel("State of birth");
-		StateOfBirthLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		setDefaultTextLabel(StateOfBirthLabel);
 		
 		JLabel RegionOfBirthLabel = new JLabel("Region of birth");
-		RegionOfBirthLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		setDefaultTextLabel(RegionOfBirthLabel);
 		
 		JLabel CityOfBirthLabel = new JLabel("City of birth");
-		CityOfBirthLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		setDefaultTextLabel(CityOfBirthLabel);
 		
-		JComboBox DayJComboBox = new JComboBox();
-		DayJComboBox.setModel(new DefaultComboBoxModel(GuiController.intervalToStringArray(1, 31)));
+		DayJComboBox = new JComboBox<Integer>();
+		DayJComboBox.setModel(new DefaultComboBoxModel<Integer>(MainController.intervalToIntegerArray(1, 31)));
 		
 
-		JComboBox YearJComboBox = new JComboBox();
-
-		YearJComboBox.setModel(new DefaultComboBoxModel(GuiController.intervalToStringArray(Calendar.getInstance().get(Calendar.YEAR) - 100, Calendar.getInstance().get(Calendar.YEAR) - 19)));
+		YearJComboBox = new JComboBox<Integer>();
+		YearJComboBox.setModel(new DefaultComboBoxModel<Integer>(MainController.intervalToIntegerArray(Calendar.getInstance().get(Calendar.YEAR) - 100, Calendar.getInstance().get(Calendar.YEAR) - 19)));
 		
-		JComboBox MonthJComboBox = new JComboBox();
+		MonthJComboBox = new JComboBox<String>();
 		MonthJComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					GuiController.updateJComboBoxDay(DayJComboBox, (String)MonthJComboBox.getSelectedItem(), (String)YearJComboBox.getSelectedItem());
-					
+					updateJComboBoxDay(DayJComboBox, (String)MonthJComboBox.getSelectedItem(), (Integer)YearJComboBox.getSelectedItem());
 				} catch (IntervalException e1) {
 					e1.printStackTrace();
 				}
 			}
 		});
-		MonthJComboBox.setModel(new DefaultComboBoxModel(new String[] {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber"}));
+		MonthJComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber"}));
 		
 		YearJComboBox.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					GuiController.updateJComboBoxDay(DayJComboBox, (String)MonthJComboBox.getSelectedItem(), (String)YearJComboBox.getSelectedItem());
-					
+					updateJComboBoxDay(DayJComboBox, (String)MonthJComboBox.getSelectedItem(), (Integer)YearJComboBox.getSelectedItem());
 				} catch (IntervalException e1) {
 					e1.printStackTrace();
 				}
@@ -205,20 +203,20 @@ public class RegistrationWindow extends JFrame {
 		});
 		
 		JLabel MonthLabel = new JLabel("Month");
-		MonthLabel.setForeground(new Color(122, 72, 72));
+		setDefaultBackgroundTextLabel(MonthLabel);
 		
 		JLabel DayLabel = new JLabel("Day");
-		DayLabel.setForeground(new Color(122, 72, 72));
+		setDefaultBackgroundTextLabel(DayLabel);
 		
 		JLabel YearLabel = new JLabel("Year");
-		YearLabel.setForeground(new Color(122, 72, 72));
+		setDefaultBackgroundTextLabel(YearLabel);
 		
-		JComboBox StateOfBirthJComboBox = new JComboBox();
-		StateOfBirthJComboBox.setModel(new DefaultComboBoxModel(WorldStates));
+		StateOfBirthJComboBox = new JComboBox<String>();
+		StateOfBirthJComboBox.setModel(new DefaultComboBoxModel<String>(WorldStates));
 		
-		JComboBox RegionJComboBox = new JComboBox();
+		RegionJComboBox = new JComboBox<String>();
 		
-		JComboBox CityOfBirthJComboBox = new JComboBox();
+		CityOfBirthJComboBox = new JComboBox<String>();
 		
 		JSeparator BottomSeparator = new JSeparator();
 		BottomSeparator.setBackground(Color.DARK_GRAY);
@@ -228,26 +226,25 @@ public class RegistrationWindow extends JFrame {
 		TopSeparator.setForeground(Color.DARK_GRAY);
 		TopSeparator.setBackground(Color.DARK_GRAY);
 		
-		JLabel lblNewLabel_1_1_1 = new JLabel("Additional informations");
-		lblNewLabel_1_1_1.setFont(new Font("Tahoma", Font.BOLD, 16));
+		JLabel AdditionalInformationLabel = new JLabel("Additional informations");
+		setDefaultHeaderTextLabel(AdditionalInformationLabel);
 		
-		textField_3 = new JTextField();
-		textField_3.setEnabled(false);
-		textField_3.setEditable(false);
-		textField_3.setColumns(10);
-		textField_3.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
+		CFTextField = new JTextField();
+		CFTextField.setEnabled(false);
+		CFTextField.setEditable(false);
+		setDefaultJTextFieldDesign(CFTextField);
 		
-		JLabel lblNewLabel_2_4_2 = new JLabel("Automatically calculated CF");
-		lblNewLabel_2_4_2.setForeground(new Color(122, 72, 72));
+		JLabel AutomaticallyCalculatedCFLabel = new JLabel("Automatically calculated CF");
+		setDefaultBackgroundTextLabel(AutomaticallyCalculatedCFLabel);
 		
-		JLabel lblNewLabel_1_2_1_2 = new JLabel("CF");
-		lblNewLabel_1_2_1_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		JLabel CFLabel = new JLabel("CF");
+		setDefaultTextLabel(CFLabel);
 		
-		JLabel lblNewLabel_1_2_1_2_1 = new JLabel("Timezone");
-		lblNewLabel_1_2_1_2_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		JLabel TimeZoneLabel = new JLabel("Timezone");
+		setDefaultTextLabel(TimeZoneLabel);
 		
-		JComboBox comboBox_1_1_1_1_1 = new JComboBox();
-		comboBox_1_1_1_1_1.setModel(new DefaultComboBoxModel(new String[] {"GMT+00:00", "GMT+01:00", "GMT+02:00", "GMT+03:00", "GMT+04:00", "GMT+05:00", "GMT+07:00", "GMT+08:00", "GMT-01:00", "GMT-02:00", "GMT-03:00", "GMT-04:00", "GMT-05:00", "GMT-07:00", "GMT-08:00"}));
+		TimeZoneJComboBox = new JComboBox<String>();
+		TimeZoneJComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"GMT+00:00", "GMT+01:00", "GMT+02:00", "GMT+03:00", "GMT+04:00", "GMT+05:00", "GMT+07:00", "GMT+08:00", "GMT-01:00", "GMT-02:00", "GMT-03:00", "GMT-04:00", "GMT-05:00", "GMT-07:00", "GMT-08:00"}));
 		GroupLayout gl_CentralPanel = new GroupLayout(CentralPanel);
 		gl_CentralPanel.setHorizontalGroup(
 			gl_CentralPanel.createParallelGroup(Alignment.TRAILING)
@@ -303,14 +300,14 @@ public class RegistrationWindow extends JFrame {
 						.addGroup(gl_CentralPanel.createSequentialGroup()
 							.addGap(31)
 							.addGroup(gl_CentralPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblNewLabel_1_1_1, GroupLayout.PREFERRED_SIZE, 248, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblNewLabel_1_2_1_2, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
+								.addComponent(AdditionalInformationLabel, GroupLayout.PREFERRED_SIZE, 248, GroupLayout.PREFERRED_SIZE)
+								.addComponent(CFLabel, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
 								.addGroup(gl_CentralPanel.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(lblNewLabel_2_4_2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(textField_3, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)
+									.addComponent(AutomaticallyCalculatedCFLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(CFTextField, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)
 									.addGroup(Alignment.LEADING, gl_CentralPanel.createParallelGroup(Alignment.TRAILING, false)
-										.addComponent(comboBox_1_1_1_1_1, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(lblNewLabel_1_2_1_2_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE))))
+										.addComponent(TimeZoneJComboBox, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(TimeZoneLabel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE))))
 							.addGap(422)))
 					.addContainerGap())
 		);
@@ -362,19 +359,57 @@ public class RegistrationWindow extends JFrame {
 					.addGap(18)
 					.addComponent(BottomSeparator, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addGap(28)
-					.addComponent(lblNewLabel_1_1_1)
+					.addComponent(AdditionalInformationLabel)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblNewLabel_1_2_1_2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+					.addComponent(CFLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(textField_3, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+					.addComponent(CFTextField, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(lblNewLabel_2_4_2)
+					.addComponent(AutomaticallyCalculatedCFLabel)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(lblNewLabel_1_2_1_2_1, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
+					.addComponent(TimeZoneLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(comboBox_1_1_1_1_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+					.addComponent(TimeZoneJComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(132, Short.MAX_VALUE))
 		);
 		CentralPanel.setLayout(gl_CentralPanel);
 	}
+	
+	// Update the Day in JComboBoxDay field based on Month and Year selected
+	public void updateJComboBoxDay(JComboBox<Integer> JComboBox, String Month, Integer Year) throws IntervalException {
+		
+		switch(Month) {
+		case "February":
+			if(Year % 4 == 0 && Year % 100 != 0 || Year % 400 == 0) {
+				JComboBox.setModel(new DefaultComboBoxModel<Integer>(MainController.intervalToIntegerArray(1, 29)));
+			} else {
+				JComboBox.setModel(new DefaultComboBoxModel<Integer>(MainController.intervalToIntegerArray(1, 28)));
+			}
+			break;
+		case "April":
+			JComboBox.setModel(new DefaultComboBoxModel<Integer>(MainController.intervalToIntegerArray(1, 30)));
+			break;
+		case "June":
+			JComboBox.setModel(new DefaultComboBoxModel<Integer>(MainController.intervalToIntegerArray(1, 30)));
+			break;
+		case "September":
+			JComboBox.setModel(new DefaultComboBoxModel<Integer>(MainController.intervalToIntegerArray(1, 30)));
+			break;
+		case "November":
+			JComboBox.setModel(new DefaultComboBoxModel<Integer>(MainController.intervalToIntegerArray(1, 30)));
+			break;
+		default:
+			JComboBox.setModel(new DefaultComboBoxModel<Integer>(MainController.intervalToIntegerArray(1, 31)));
+			break;
+		}
+		
+	}
+	
+
+	
+	// TODO Add a CF calculator
+//	public String calculateCF() {
+//		
+//	}
+	
 }

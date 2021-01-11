@@ -1,4 +1,4 @@
-package objects;
+package entities;
 
 import java.util.LinkedList;
 
@@ -20,47 +20,55 @@ public class Employee {
 		this.TimeZone = TimeZone;
 		this.Skill = Skill;
 	}
-
+	
 	public String getCF() {
 		return CF;
 	}
 
-	public void setCF(String CF) {
-		CF = CF;
+	public void setCF(String cF) {
+		CF = cF;
 	}
 
 	public String getName() {
 		return Name;
 	}
 
-	public void setName(String Name) {
-		Name = Name;
+	public void setName(String name) {
+		Name = name;
 	}
 
 	public String getSurname() {
 		return Surname;
 	}
 
-	public void setSurname(String Surname) {
-		Surname = Surname;
+	public void setSurname(String surname) {
+		Surname = surname;
 	}
 
 	public float getSalary() {
 		return Salary;
 	}
 
-	public void setSalary(float Salary) {
-		Salary = Salary;
+	public void setSalary(float salary) {
+		Salary = salary;
 	}
-	
+
 	public String getTimeZone() {
 		return TimeZone;
 	}
 
-	public void setTimeZone(float TimeZone) {
-		Salary = TimeZone;
+	public void setTimeZone(String timeZone) {
+		TimeZone = timeZone;
 	}
-	
+
+	public LinkedList<Skill> getSkill() {
+		return Skill;
+	}
+
+	public void setSkill(LinkedList<Skill> skill) {
+		Skill = skill;
+	}
+
 	public LinkedList<Skill> getPersonSkillList() {
 		return Skill;
 	}
