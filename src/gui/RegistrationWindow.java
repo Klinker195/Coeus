@@ -75,7 +75,7 @@ public class RegistrationWindow extends GenericFrame {
 //	}
 
 	
-	public RegistrationWindow(int DisplayWidth, int DisplayHeight, String[] WorldStates) throws IntervalException {
+	public RegistrationWindow(int DisplayWidth, int DisplayHeight, String[] WorldStates, String[] RegionNames) throws IntervalException {
 		setBounds(DisplayWidth/2 - 340, DisplayHeight/2 - 450, 680, 900);
 		MainPanel = new JPanel();
 		setDefaultBorderDesign(MainPanel);
@@ -215,8 +215,10 @@ public class RegistrationWindow extends GenericFrame {
 		StateOfBirthJComboBox.setModel(new DefaultComboBoxModel<String>(WorldStates));
 		
 		RegionJComboBox = new JComboBox<String>();
+		RegionJComboBox.setModel(new DefaultComboBoxModel<String>(RegionNames));
 		
 		CityOfBirthJComboBox = new JComboBox<String>();
+		
 		
 		JSeparator BottomSeparator = new JSeparator();
 		BottomSeparator.setBackground(Color.DARK_GRAY);

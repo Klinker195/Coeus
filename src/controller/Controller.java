@@ -33,6 +33,7 @@ public class Controller {
 	
 	private UserFounderDAO UserFounderDAO = new UserFounderDAOPostgre();
 	private WorldStateDAO WorldStatesDAO = new WorldStateDAOPostgre();
+	private ItalianDistrictDAO ItalianDistrictDAO = new ItalianDistrictDAOPostgre();
 	
 	private LoginWindow LoginWindow;
 	private WelcomeWindow WelcomeWindow;
@@ -77,7 +78,7 @@ public class Controller {
 	public void userRegistration() throws IntervalException {
 		
 		if(RegistrationWindow == null) {
-			RegistrationWindow RegistrationWindow = new RegistrationWindow(DisplayWidth, DisplayHeight, this.arrayListToStringArray(WorldStatesDAO.getAllStates()));
+			RegistrationWindow RegistrationWindow = new RegistrationWindow(DisplayWidth, DisplayHeight, this.arrayListToStringArray(WorldStatesDAO.getAllStates()), this.arrayListToStringArray(ItalianDistrictDAO.getAllRegionNames()));
 			RegistrationWindow.setVisible(true);
 		} else {
 			if(RegistrationWindow.isVisible()) {
