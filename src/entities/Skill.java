@@ -1,30 +1,24 @@
 package entities;
 
+import controller.Controller;
+
 public class Skill {
 
-	private int ID;
 	private String Name;
+	private Controller MainController = Controller.getIstance();
 	
-	public Skill(int ID, String Name) {
+	public Skill(String Name) {
 		super();
-		this.ID = ID;
-		this.Name = Name;
+		setName(Name);
 	}
 
-	public int getID() {
-		return ID;
-	}
-
-	public void setID(int iD) {
-		ID = iD;
-	}
 
 	public String getName() {
 		return Name;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		this.Name = name;
 	}
 	
 }

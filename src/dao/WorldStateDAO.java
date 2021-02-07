@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public interface WorldStateDAO {
 
-	ArrayList<String> getAllStates();
+	ArrayList<String> getAllStateNames();
 
+	String getStateCodeByStateName(String StateName);
+	
 }

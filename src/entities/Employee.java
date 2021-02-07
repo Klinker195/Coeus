@@ -1,48 +1,60 @@
 package entities;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+
+import controller.Controller;
+import exceptions.EmptyListException;
 
 public class Employee {
 
 	private String CF;
 	private String Name;
 	private String Surname;
+	private String Email;
 	private float Salary;
 	private String TimeZone;
-	private LinkedList<Skill> Skill;
 	
-	public Employee(String CF, String Name, String Surname, float Salary, String TimeZone,LinkedList<Skill> Skill) {
-		super();
+	private User User = null;
+	private ArrayList<Skill> Skill;
+	
+	private Controller MainController = Controller.getIstance();
+	
+	// ALL 
+	public Employee(String CF, String Name, String Surname, String Email, String PhoneNumber, float Salary, String TimeZone, User User, ArrayList<Skill> Skill) throws EmptyListException {
+		this(CF, Name, Surname, Email, Salary, TimeZone, Skill);
+		this.User = User;
+	}
+	
+	// NO USER
+	public Employee(String CF, String Name, String Surname, String Email, float Salary, String TimeZone, ArrayList<Skill> Skill) throws EmptyListException {
 		this.CF = CF;
 		this.Name = Name;
 		this.Surname = Surname;
+		this.Email = Email;
 		this.Salary = Salary;
 		this.TimeZone = TimeZone;
-		this.Skill = Skill;
+		setSkillList(Skill);
 	}
 	
+
 	public String getCF() {
 		return CF;
-	}
-
-	public void setCF(String cF) {
-		CF = cF;
 	}
 
 	public String getName() {
 		return Name;
 	}
 
-	public void setName(String name) {
-		Name = name;
-	}
-
 	public String getSurname() {
 		return Surname;
 	}
 
-	public void setSurname(String surname) {
-		Surname = surname;
+	public String getEmail() {
+		return Email;
+	}
+
+	public void setEmail(String email) {
+		Email = email;
 	}
 
 	public float getSalary() {
@@ -61,20 +73,31 @@ public class Employee {
 		TimeZone = timeZone;
 	}
 
-	public LinkedList<Skill> getSkill() {
-		return Skill;
+	public User getUser() {
+		return User;
 	}
 
-	public void setSkill(LinkedList<Skill> skill) {
+	public void setUser(User user) {
+		User = user;
+	}
+	
+	public void setSkillList(ArrayList<Skill> skill) throws EmptyListException {
+		MainController.checkEmptyList(skill);
 		Skill = skill;
 	}
-
-	public LinkedList<Skill> getPersonSkillList() {
+	
+	public ArrayList<Skill> getSkillArray() {
 		return Skill;
 	}
-
-	public void setPersonSkillList(LinkedList<Skill> personSkills) {
-		Skill = personSkills;
+	
+	public void addSkill(Skill skill) {
+		Skill.add(skill);
+	}
+	
+	public void removeSkill(Skill skill) {
+		if(Skill.size() > 1) {
+			Skill.remove(skill);
+		}
 	}
 	
 }

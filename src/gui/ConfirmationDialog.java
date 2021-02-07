@@ -46,7 +46,7 @@ public class ConfirmationDialog extends GenericDialog {
 	public ConfirmationDialog(String Title, String Text, int DisplayWidth, int DisplayHeight) {
 		setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 		setDefaultDesign(this);
-		setBounds(DisplayWidth/2 - 275, DisplayHeight/2 - 190, 452, 302);
+		setBounds(DisplayWidth/2 - 226, DisplayHeight/2 - 151, 452, 302);
 		getContentPane().setLayout(new BorderLayout());
 		setDefaultBorderDesign(MainPanel);
 		getContentPane().add(MainPanel, BorderLayout.CENTER);
@@ -92,7 +92,7 @@ public class ConfirmationDialog extends GenericDialog {
 				SimpleAttributeSet center = new SimpleAttributeSet();
 				StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
 				DocStyle.setParagraphAttributes(0, DocStyle.getLength(), center, false);
-				MessageTextPane.setText(convertToWrappedText(Text));
+				MessageTextPane.setText(setTextToCenter(Text));
 				setDefaultTextJTextPane(MessageTextPane);
 				MessageTextPane.setBackground(new Color(166, 111, 111));
 				MessageTextPane.setEditable(false);
@@ -131,7 +131,7 @@ public class ConfirmationDialog extends GenericDialog {
 		}
 	}
 
-	public boolean isCheck() {
+	public boolean isConfirmed() {
 		return Check;
 	}
 

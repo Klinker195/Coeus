@@ -65,7 +65,7 @@ public class WelcomeWindow extends GenericFrame {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
 				try {
-					MainController.userRegistration();
+					MainController.employeeRegistration(0);
 				} catch (IntervalException e1) {
 					e1.printStackTrace();
 				}

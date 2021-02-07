@@ -10,6 +10,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -32,12 +34,15 @@ public class Controller {
 	private int DisplayHeight = GraphicDisplay.getDisplayMode().getHeight();
 	
 	private UserFounderDAO UserFounderDAO = new UserFounderDAOPostgre();
-	private WorldStateDAO WorldStatesDAO = new WorldStateDAOPostgre();
+	private WorldStateDAO WorldStateDAO = new WorldStateDAOPostgre();
 	private ItalianDistrictDAO ItalianDistrictDAO = new ItalianDistrictDAOPostgre();
+	private SkillDAO SkillDAO = new SkillDAOPostgre();
+	private EmployeeDAO EmployeeDAO = new EmployeeDAOPostgre();
 	
 	private LoginWindow LoginWindow;
 	private WelcomeWindow WelcomeWindow;
-	private RegistrationWindow RegistrationWindow;
+	private EmployeeEditorWindow EmployeeRegistrationWindow;
+	private RegistrationAuthDataWindow AuthDataRegistrationWindow;
 	
 	private MessageDialog MessageDialog;
 	private ConfirmationDialog ConfirmationDialog;
@@ -65,7 +70,7 @@ public class Controller {
 	// Opens LoginScreen or to WelcomeWindow based on Founder existence
 	public void start() {
 		
-		if(UserFounderDAO.isEmpty()) {
+		if(UserFounderDAO.searchFounder()) {
 			WelcomeWindow = new WelcomeWindow(DisplayWidth, DisplayHeight);
 			WelcomeWindow.setVisible(true);
 		} else {
@@ -75,17 +80,41 @@ public class Controller {
 		
 	}
 	
-	public void userRegistration() throws IntervalException {
+	/**
+	 *  Modality values guide:
+	 *  Modality = 0 -> FounderMode;
+	 *  Modality = 1 -> UserRegistrationMode;
+	 *  Modality = 2 -> EmployeeCreationMode;
+	 */
+	public void employeeRegistration(int Modality) throws IntervalException {
 		
-		if(RegistrationWindow == null) {
-			RegistrationWindow RegistrationWindow = new RegistrationWindow(DisplayWidth, DisplayHeight, this.arrayListToStringArray(WorldStatesDAO.getAllStates()), this.arrayListToStringArray(ItalianDistrictDAO.getAllRegionNames()));
+		if(EmployeeRegistrationWindow == null) {
+			EmployeeEditorWindow RegistrationWindow = new EmployeeEditorWindow(DisplayWidth, DisplayHeight, Modality);
+			RegistrationWindow.setData();
 			RegistrationWindow.setVisible(true);
 		} else {
-			if(RegistrationWindow.isVisible()) {
-				RegistrationWindow.toFront();
+			if(EmployeeRegistrationWindow.isVisible()) {
+				EmployeeRegistrationWindow.toFront();
 				System.out.println("RegistrationWindow is already visible!");
 			} else {
-				RegistrationWindow.setVisible(true);
+				EmployeeRegistrationWindow.setVisible(true);
+			}
+		}
+		
+	}
+	
+	public void userRegistration(Employee NewEmployee, boolean IsFounder) {
+		
+		if(AuthDataRegistrationWindow == null) {
+			
+			RegistrationAuthDataWindow AuthDataRegistrationWindow = new RegistrationAuthDataWindow(NewEmployee, IsFounder, DisplayWidth, DisplayHeight);
+			AuthDataRegistrationWindow.setVisible(true);
+		} else {
+			if(AuthDataRegistrationWindow.isVisible()) {
+				AuthDataRegistrationWindow.toFront();
+				System.out.println("AuthDataRegistrationWindow is already visible!");
+			} else {
+				AuthDataRegistrationWindow.setVisible(true);
 			}
 		}
 		
@@ -132,7 +161,7 @@ public class Controller {
 	}
 	
 	public boolean getConfirmationDialogValue() {
-		return ConfirmationDialog.isCheck();
+		return ConfirmationDialog.isConfirmed();
 	}
 	
 	public void displayConfirmationDialog(String Title, String Text) {
@@ -143,6 +172,112 @@ public class Controller {
 	public void displayMessageDialog(String Title, String Text) {
 		MessageDialog = new MessageDialog(Title, Text, DisplayWidth, DisplayHeight);
 		MessageDialog.setVisible(true);
+	}
+
+	public boolean isInInterval(Integer[] Array, int Number) {
+		
+		for(int i = 0; i < Array.length; i++) {
+			if(Number == Array[i]) {
+				return true;
+			}
+		}
+		
+		return false;
+		
+	}
+	
+	/* TODO Are these checks necessary?
+	 
+	public void checkTextMaxLength(String Text, int MaxLength) throws InvalidTextException {
+		if(Text.length() > MaxLength) {
+			throw new InvalidTextException();
+		}
+	}
+	
+	public void checkTextLength(String Text, int RequiredLength) throws InvalidTextException {
+		if(Text.length() != RequiredLength) {
+			throw new InvalidTextException();
+		} 
+	}
+	
+	public void checkEmailValidity(String Email) throws InvalidTextException {
+		checkTextMaxLength(Email, 128);
+		
+		final String EmailRegex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
+		Pattern EmailPattern = Pattern.compile(EmailRegex);
+		Matcher EmailMatcher = EmailPattern.matcher(Email);
+		
+		if(!EmailMatcher.matches()) {
+			throw new InvalidTextException();
+		}
+		
+	}
+	*/
+	public <E> boolean checkEmptyList(ArrayList<E> List) throws EmptyListException {
+		
+		if(List != null) {
+			if(!List.isEmpty()) {
+				return true;
+			} else {
+				throw new EmptyListException();
+			}
+		} else {
+			throw new EmptyListException();
+		}
+		
+	}
+	
+    public String encrypt(char[] Password) {
+
+    	
+    	final char[] RotAlphabet = {'!', '#', '%', '&', '\'', '*', '+', '-', '/', '=', '?', '^', '_', '.', '{', '|', 'b', 'Y', 'f', 'M',
+    			'k', 'A', 'x', 'W', 'o', 'L', 'h', 'R', 't', 'G', 'l', 'P', 'a', 'Z', 'g', 'J', 'z', 'D', 's', 'U', 'w', 'X', 'i', 'N', 'r', 'K',
+    			'c', 'F', 'v', 'B', 'u', 'S', 'm', 'H', 'y', 'E', 'd', 'V', 'e', 'T', 'p', 'Q', 'j', 'O', 'n', 'I', 'q', 'C', '4', '8', '3', '5',
+    			'0', '1', '2', '9', '7', '6'};
+    	
+        for (int i = 0; i < Password.length; i++) {
+            char letter = Password[i];
+            
+            int j = 0;
+            
+            for(j = 0; i < RotAlphabet.length; j++) {
+            	if(letter == RotAlphabet[j]) break;
+            }
+            
+            if(j > RotAlphabet.length/2) {
+            	j -= RotAlphabet.length/2;
+            } else {
+            	j += RotAlphabet.length/2;
+            	if(j >= RotAlphabet.length) {
+            		j -= RotAlphabet.length/2;
+            	}
+            }
+            
+            
+            Password[i] = RotAlphabet[j];
+        }
+        // Convert array to a new String.
+        return new String(Password);
+    }
+	
+	public UserFounderDAO getUserFounderDAO() {
+		return UserFounderDAO;
+	}
+
+	public WorldStateDAO getWorldStateDAO() {
+		return WorldStateDAO;
+	}
+
+	public ItalianDistrictDAO getItalianDistrictDAO() {
+		return ItalianDistrictDAO;
+	}
+	
+	public SkillDAO getSkillDAO() {
+		return SkillDAO;
+	}
+
+	public EmployeeDAO getEmployeeDAO() {
+		return EmployeeDAO;
 	}
 	
 }

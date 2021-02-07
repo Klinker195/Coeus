@@ -92,7 +92,7 @@ public class MessageDialog extends GenericDialog {
 				SimpleAttributeSet center = new SimpleAttributeSet();
 				StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
 				DocStyle.setParagraphAttributes(0, DocStyle.getLength(), center, false);
-				MessageTextPane.setText(convertToWrappedText(Text));
+				MessageTextPane.setText(setTextToCenter(Text));
 				setDefaultTextJTextPane(MessageTextPane);
 				MessageTextPane.setBackground(new Color(166, 111, 111));
 				MessageTextPane.setEditable(false);

@@ -14,35 +14,35 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 		
 	}
 	
-	public static void main(String args[]) {
-	
-		ItalianDistrictDAO ItalianDistrictsDAO = new ItalianDistrictDAOPostgre();
-	
-	ArrayList<String> RegionNamesList = ItalianDistrictsDAO.getAllRegionNames();
-	
-	System.out.format(" [LISTA REGIONI ITALIANI]\n");
-	for(String s : RegionNamesList) {
-		System.out.println(" " + s);
-	}
-	System.out.format("\n\n");
-	
-	LinkedList<String> ProvinceAcronymsList = ItalianDistrictsDAO.getAllProvinceAcronymsByRegionName("Campania");
-	
-	System.out.format(" [LISTA ACRONIMI PROVINCE ITALIANE]\n");
-	for(String s : ProvinceAcronymsList) {
-		System.out.println(" " + s);
-	}
-	System.out.format("\n\n");
-	
-	LinkedList<String> DistrictNamesList = ItalianDistrictsDAO.getAllDistrictsByProvinceAcronym("NA");
-	
-	System.out.format(" [LISTA COMUNI ITALIANI]\n");
-	for(String s : DistrictNamesList) {
-		System.out.println(" " + s);
-	}
-	System.out.format("\n\n");
-	
-}
+//	public static void main(String args[]) {
+//	
+//		ItalianDistrictDAO ItalianDistrictsDAO = new ItalianDistrictDAOPostgre();
+//	
+//	ArrayList<String> RegionNamesList = ItalianDistrictsDAO.getAllRegionNames();
+//	
+//	System.out.format(" [LISTA REGIONI ITALIANI]\n");
+//	for(String s : RegionNamesList) {
+//		System.out.println(" " + s);
+//	}
+//	System.out.format("\n\n");
+//	
+//	LinkedList<String> ProvinceAcronymsList = ItalianDistrictsDAO.getAllProvinceAcronymsByRegionName("Campania");
+//	
+//	System.out.format(" [LISTA ACRONIMI PROVINCE ITALIANE]\n");
+//	for(String s : ProvinceAcronymsList) {
+//		System.out.println(" " + s);
+//	}
+//	System.out.format("\n\n");
+//	
+//	LinkedList<String> DistrictNamesList = ItalianDistrictsDAO.getAllDistrictsByProvinceAcronym("NA");
+//	
+//	System.out.format(" [LISTA COMUNI ITALIANI]\n");
+//	for(String s : DistrictNamesList) {
+//		System.out.println(" " + s);
+//	}
+//	System.out.format("\n\n");
+//	
+//}
 
 
 	@Override
@@ -53,7 +53,7 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 		try {
 			Connection Conn = tryConnection();
 			Statement Stm = Conn.createStatement();
-			ResultSet Rs = Stm.executeQuery("SELECT \"RegionName\" FROM \"ItalianDistrict\" GROUP BY \"RegionName\"");
+			ResultSet Rs = Stm.executeQuery("SELECT \"RegionName\" FROM \"ItalianDistrict\" GROUP BY \"RegionName\" ORDER BY \"RegionName\" ASC");
 			ArrayList<String> tmpList = new ArrayList<String>();
 			while(Rs.next()) {
 				tmpList.add(Rs.getString("RegionName"));
@@ -73,7 +73,7 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 	
 		try {
 			Connection Conn = tryConnection();
-			PreparedStatement PrepStm = Conn.prepareStatement("SELECT \"ProvinceName\" FROM \"ItalianDistrict\" WHERE \"RegionName\" = ? GROUP BY \"RegionName\"");
+			PreparedStatement PrepStm = Conn.prepareStatement("SELECT \"ProvinceName\" FROM \"ItalianDistrict\" WHERE \"RegionName\" = ? GROUP BY \"ProvinceName\" ORDER BY \"ProvinceName\" ASC");
 			PrepStm.setString(1, RegionName);
 			ResultSet Rs = PrepStm.executeQuery();
 			ArrayList<String> TmpList = new ArrayList<String>();
@@ -136,5 +136,54 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 		return null;
 		
 	}
+	
+	@Override
+	public ArrayList<String> getAllDistrictsByProvinceName(String ProvinceName) {
+		
+		loadDriver();
+		
+		try {
+			Connection Conn = tryConnection();
+			PreparedStatement PrepStm = Conn.prepareStatement("SELECT \"DistrictName\" FROM \"ItalianDistrict\" WHERE \"ProvinceName\" = ?");
+			PrepStm.setString(1, ProvinceName);
+			ResultSet Rs = PrepStm.executeQuery();
+			ArrayList<String> tmpList = new ArrayList<String>();
+			while(Rs.next()) {
+				tmpList.add(Rs.getString("DistrictName"));
+			}
+			Conn.close();
+			return tmpList;
+		} catch(SQLException e) {
+			System.out.println("SQL Exception:\n" + e);
+		}
+		return null;
+		
+	}
+	
+	@Override
+	public String getDistrictCodeByProvinceAndDistrictName(String ProvinceName, String DistrictName) {
+		
+		loadDriver();
+		
+		try {
+			Connection Conn = tryConnection();
+			PreparedStatement PrepStm = Conn.prepareStatement("SELECT \"DistrictCode\"\r\n"
+					+ "FROM public.\"ItalianDistrict\"\r\n"
+					+ "WHERE \"ProvinceName\" = ? AND \"DistrictName\" = ?");
+			PrepStm.setString(1, ProvinceName);
+			PrepStm.setString(2, DistrictName);
+			ResultSet Rs = PrepStm.executeQuery();
+			String DistrictCode = "";
+			while(Rs.next()) {
+				DistrictCode = Rs.getString("DistrictCode");
+			}
+			Conn.close();
+			return DistrictCode;
+		} catch(SQLException e) {
+			System.out.println("SQL Exception:\n" + e);
+		}
+		return null;
+	}
+	
 	
 }

@@ -95,48 +95,77 @@ public class GenericDialog extends JDialog {
 		Label.setForeground(new Color(122, 72, 72));
 	}
 	
-	public String convertToWrappedText(String Text) {
+//	public String convertToWrappedText(String Text) {
+//		
+//		String InitialSpacing = "";
+//		String NewString = "";
+//		
+//		
+//		final int MaxCharactersPerLine = 50;
+//		int LinesQuantity;
+//		float MaxLines = Text.length() / MaxCharactersPerLine;
+//		int InitialSpacingMinimumSize = 7;
+//		
+//		if(MaxLines % 0 == 0) {
+//			LinesQuantity = (int)MaxLines;
+//		} else {
+//			LinesQuantity = (int)MaxLines + 1;
+//		}
+//		
+//		if(LinesQuantity < 1) {
+//			return InitialSpacing + Text;
+//		}
+//		
+//		if(LinesQuantity == 1) {
+//			for(int i = 0; i < InitialSpacingMinimumSize; i++) {
+//				InitialSpacing = InitialSpacing + "\n";
+//			}
+//		} else {
+//			for(int i = 0; i < InitialSpacingMinimumSize - LinesQuantity; i++) {
+//				InitialSpacing = InitialSpacing + "\n";
+//			}
+//		}
+//		
+//		for(int i = 0; i < LinesQuantity; i++) {
+//			if(i == LinesQuantity - 1) {
+//				NewString = NewString + Text.substring(i * MaxCharactersPerLine) + "\n";
+//				continue;
+//			}
+//			NewString = NewString + Text.substring(i * MaxCharactersPerLine, MaxCharactersPerLine + (i * MaxCharactersPerLine)) + "\n";
+//		}
+//		
+//		NewString = InitialSpacing + NewString;
+//		
+//		return NewString;
+//	}
+	
+	public String setTextToCenter(String Text) {
+
+		final int MaxSpace = 6;
 		
-		String InitialSpacing = "";
-		String NewString = "";
+		int LineCount = Text.split("[\n|\r]").length;
 		
+		float HalfLinesFloat = LineCount / 2;
+		int HalfLinesInt;
 		
-		final int MaxCharactersPerLine = 50;
-		int LinesQuantity;
-		float MaxLines = Text.length() / MaxCharactersPerLine;
-		int InitialSpacingMinimumSize = 7;
-		
-		if(MaxLines % 0 == 0) {
-			LinesQuantity = (int)MaxLines;
+		if(HalfLinesFloat % 1 == 0) {
+			HalfLinesInt = (int)HalfLinesFloat;
 		} else {
-			LinesQuantity = (int)MaxLines + 1;
+			HalfLinesInt = (int)HalfLinesFloat + 1;
 		}
 		
-		if(LinesQuantity < 1) {
-			return InitialSpacing + Text;
+		int Spacing = 0;
+		Spacing = MaxSpace - HalfLinesInt;
+		
+		StringBuilder SpacedText = new StringBuilder();
+		
+		for(int i = 0; i < Spacing; i++) {
+			SpacedText.append("\n");
 		}
 		
-		if(LinesQuantity == 1) {
-			for(int i = 0; i < InitialSpacingMinimumSize; i++) {
-				InitialSpacing = InitialSpacing + "\n";
-			}
-		} else {
-			for(int i = 0; i < InitialSpacingMinimumSize - LinesQuantity; i++) {
-				InitialSpacing = InitialSpacing + "\n";
-			}
-		}
+		SpacedText.append(Text);
 		
-		for(int i = 0; i < LinesQuantity; i++) {
-			if(i == LinesQuantity - 1) {
-				NewString = NewString + Text.substring(i * MaxCharactersPerLine) + "\n";
-				continue;
-			}
-			NewString = NewString + Text.substring(i * MaxCharactersPerLine, MaxCharactersPerLine + (i * MaxCharactersPerLine)) + "\n";
-		}
-		
-		NewString = InitialSpacing + NewString;
-		
-		return NewString;
+		return SpacedText.toString();
 	}
 	
 }
