@@ -33,11 +33,12 @@ public class Controller {
 	private int DisplayWidth = GraphicDisplay.getDisplayMode().getWidth();
 	private int DisplayHeight = GraphicDisplay.getDisplayMode().getHeight();
 	
-	private UserFounderDAO UserFounderDAO = new UserFounderDAOPostgre();
+	private UserDAO UserDAO = new UserDAOPostgre();
 	private WorldStateDAO WorldStateDAO = new WorldStateDAOPostgre();
 	private ItalianDistrictDAO ItalianDistrictDAO = new ItalianDistrictDAOPostgre();
 	private SkillDAO SkillDAO = new SkillDAOPostgre();
 	private EmployeeDAO EmployeeDAO = new EmployeeDAOPostgre();
+	private TopicDAO TopicDAO = new TopicDAOPostgre();
 	
 	private LoginWindow LoginWindow;
 	private WelcomeWindow WelcomeWindow;
@@ -70,7 +71,7 @@ public class Controller {
 	// Opens LoginScreen or to WelcomeWindow based on Founder existence
 	public void start() {
 		
-		if(UserFounderDAO.searchFounder()) {
+		if(UserDAO.searchFounder()) {
 			WelcomeWindow = new WelcomeWindow(DisplayWidth, DisplayHeight);
 			WelcomeWindow.setVisible(true);
 		} else {
@@ -186,33 +187,6 @@ public class Controller {
 		
 	}
 	
-	/* TODO Are these checks necessary?
-	 
-	public void checkTextMaxLength(String Text, int MaxLength) throws InvalidTextException {
-		if(Text.length() > MaxLength) {
-			throw new InvalidTextException();
-		}
-	}
-	
-	public void checkTextLength(String Text, int RequiredLength) throws InvalidTextException {
-		if(Text.length() != RequiredLength) {
-			throw new InvalidTextException();
-		} 
-	}
-	
-	public void checkEmailValidity(String Email) throws InvalidTextException {
-		checkTextMaxLength(Email, 128);
-		
-		final String EmailRegex = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$";
-		Pattern EmailPattern = Pattern.compile(EmailRegex);
-		Matcher EmailMatcher = EmailPattern.matcher(Email);
-		
-		if(!EmailMatcher.matches()) {
-			throw new InvalidTextException();
-		}
-		
-	}
-	*/
 	public <E> boolean checkEmptyList(ArrayList<E> List) throws EmptyListException {
 		
 		if(List != null) {
@@ -260,8 +234,8 @@ public class Controller {
         return new String(Password);
     }
 	
-	public UserFounderDAO getUserFounderDAO() {
-		return UserFounderDAO;
+	public UserDAO getUserDAO() {
+		return UserDAO;
 	}
 
 	public WorldStateDAO getWorldStateDAO() {
@@ -278,6 +252,14 @@ public class Controller {
 
 	public EmployeeDAO getEmployeeDAO() {
 		return EmployeeDAO;
+	}
+
+	public TopicDAO getTopicDAO() {
+		return TopicDAO;
+	}
+
+	public void setTopicDAO(TopicDAO topicDAO) {
+		TopicDAO = topicDAO;
 	}
 	
 }

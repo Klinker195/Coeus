@@ -12,9 +12,10 @@ public abstract class Project {
 	private String Description = null;
 	private LocalDate StartingDate;
 	private int MaxEmployee;
-	private String Modality;
-	private ArrayList<String> TopicList;
+	private Modality Modality;
+	private ArrayList<Topic> TopicList;
 	
+	private User ProjectManager;
 	private ArrayList<Meeting> MeetingList = new ArrayList<Meeting>();
 	private ArrayList<User> UserList;
 	
@@ -22,36 +23,35 @@ public abstract class Project {
 	
 	
 	// ALL
-	protected Project(String Name, String Description, LocalDate StartingDate, int MaxEmployee, String Modality, ArrayList<String> Topic, ArrayList<Meeting> MeetingList, ArrayList<User> UserList) throws EmptyListException {
-		this(Name, StartingDate, MaxEmployee, Modality, Topic, UserList);
+	protected Project(String Name, String Description, LocalDate StartingDate, int MaxEmployee, Modality Modality, ArrayList<Topic> TopicList, ArrayList<Meeting> MeetingList, ArrayList<User> UserList, User ProjectManager) throws EmptyListException {
+		this(Name, StartingDate, MaxEmployee, Modality, TopicList, UserList, ProjectManager);
 		this.Description = Description;
 		this.MeetingList = MeetingList;
 	}
 	
 	// NO DESCRIPTION
-	protected Project(String Name, LocalDate StartingDate, int MaxEmployee, String Modality, ArrayList<String> TopicList, ArrayList<Meeting> MeetingList, ArrayList<User> UserList) throws EmptyListException {
-		this(Name, StartingDate, MaxEmployee, Modality, TopicList, UserList);
+	protected Project(String Name, LocalDate StartingDate, int MaxEmployee, Modality Modality, ArrayList<Topic> TopicList, ArrayList<Meeting> MeetingList, ArrayList<User> UserList, User ProjectManager) throws EmptyListException {
+		this(Name, StartingDate, MaxEmployee, Modality, TopicList, UserList, ProjectManager);
 		this.MeetingList = MeetingList;
 	}
 	
 	// NO MEETING
-	protected Project(String Name, String Description, LocalDate StartingDate, int MaxEmployee, String Modality, ArrayList<String> TopicList, ArrayList<User> UserList) throws EmptyListException {
-		this(Name, StartingDate, MaxEmployee, Modality, TopicList, UserList);
+	protected Project(String Name, String Description, LocalDate StartingDate, int MaxEmployee, Modality Modality, ArrayList<Topic> TopicList, ArrayList<User> UserList, User ProjectManager) throws EmptyListException {
+		this(Name, StartingDate, MaxEmployee, Modality, TopicList, UserList, ProjectManager);
 		this.Description = Description;
 	}
 	
 	// NO DESCRIPTION NO MEETING
-	protected Project(String Name, LocalDate StartingDate, int MaxEmployee, String Modality, ArrayList<String> TopicList, ArrayList<User> UserList) throws EmptyListException {
+	protected Project(String Name, LocalDate StartingDate, int MaxEmployee, Modality Modality, ArrayList<Topic> TopicList, ArrayList<User> UserList, User ProjectManager) throws EmptyListException {
 		super();
 		this.Name = Name;
 		this.StartingDate = StartingDate;
 		this.MaxEmployee = MaxEmployee;
 		this.Modality = Modality;
+		this.setProjectManager(ProjectManager);
 		setTopicList(TopicList);
 		setUserList(UserList);
 	}
-
-	
 	
 	public String getName() {
 		return Name;
@@ -85,28 +85,28 @@ public abstract class Project {
 		MaxEmployee = maxEmployee;
 	}
 
-	public String getModality() {
+	public Modality getModality() {
 		return Modality;
 	}
 
-	public void setModality(String modality) {
+	public void setModality(Modality modality) {
 		Modality = modality;
 	}
 
-	public ArrayList<String> getTopic() {
+	public ArrayList<Topic> getTopic() {
 		return TopicList;
 	}
 
-	public void setTopicList(ArrayList<String> topicList) throws EmptyListException {
+	public void setTopicList(ArrayList<Topic> topicList) throws EmptyListException {
 		MainController.checkEmptyList(topicList);
 		TopicList = topicList;
 	}
 
-	public void addTopic(String topic) {
+	public void addTopic(Topic topic) {
 		TopicList.add(topic);
 	}
 	
-	public void removeTopic(String topic) {
+	public void removeTopic(Topic topic) {
 		if(TopicList.size() != 1) {
 			TopicList.remove(topic);
 		}
@@ -145,6 +145,14 @@ public abstract class Project {
 		if(UserList.size() > 1) {
 			UserList.remove(user);
 		}
+	}
+
+	public User getProjectManager() {
+		return ProjectManager;
+	}
+
+	public void setProjectManager(User projectManager) {
+		ProjectManager = projectManager;
 	}
 	
 }

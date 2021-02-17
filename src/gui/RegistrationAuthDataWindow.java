@@ -19,6 +19,7 @@ import controller.Controller;
 import entities.Employee;
 import entities.User;
 import entities.UserFounder;
+import entities.UserStandard;
 
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTextField;
@@ -150,15 +151,18 @@ public class RegistrationAuthDataWindow extends GenericFrame {
 				} else {
 					if(MainController.getConfirmationDialogValue()) {
 						if(IsFounder) {
-							User NewFounder = new UserFounder(MainController.getUserFounderDAO().getNewUserID(), MainController.encrypt(PasswordTextField.getPassword()), NewEmployee);
-							MainController.getUserFounderDAO().insertUserFounder(NewFounder);
+							User NewFounder = new UserFounder(MainController.getUserDAO().getNewUserID(), MainController.encrypt(PasswordTextField.getPassword()), NewEmployee);
+							MainController.getUserDAO().insertUserFounder(NewFounder);
 							dispose();
 							MainController.displayMessageDialog("Success!", "Your account has been successfully created!");
-							// TODO Go to login window
+							MainController.start();
 						} else {
-							// TODO Standard User creation
+							User NewUser = new UserStandard(MainController.getUserDAO().getNewUserID(), MainController.encrypt(PasswordTextField.getPassword()), NewEmployee);
+							MainController.getUserDAO().insertStandardUser(NewUser);
+							dispose();
+							MainController.displayMessageDialog("Success!", "Your account has been successfully created!");
+							MainController.start();
 						}
-						// TODO Go to login window
 					}
 				}
 				

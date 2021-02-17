@@ -6,15 +6,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
-import entities.Skill;
+import controller.Controller;
 import entities.User;
 import entities.UserFounder;
 
-public class UserFounderDAOPostgre extends DAOPostgre implements UserFounderDAO {
+public class UserDAOPostgre extends DAOPostgre implements UserDAO {
+
+	private Controller MainController = Controller.getIstance();
 	
-	public UserFounderDAOPostgre() {
+	public UserDAOPostgre() {
 		super();
 	}
 	
@@ -38,6 +39,35 @@ public class UserFounderDAOPostgre extends DAOPostgre implements UserFounderDAO 
 			System.out.println("SQL Exception:\n" + e);
 		}
 		return false;
+	}
+	
+	@Override
+	public void insertStandardUser(User NewUser) {
+		
+		loadDriver();
+		
+		try {
+			Connection Conn = tryConnection();
+			PreparedStatement PrepStm = Conn.prepareStatement("INSERT INTO public.\"User\"(\r\n"
+					+ "	\"ID\", \"Password\", \"Admin\", \"Founder\")\r\n"
+					+ "	VALUES (?, ?, ?, ?);");
+			PrepStm.setInt(1, NewUser.getID());
+			PrepStm.setString(2, NewUser.getPassword());
+			PrepStm.setBoolean(3, false);
+			PrepStm.setBoolean(4, false);
+			PrepStm.executeUpdate();
+			
+			PrepStm = Conn.prepareStatement("UPDATE public.\"Employee\"\r\n"
+					+ "SET \"UserID\" = ?\r\n"
+					+ "WHERE \"CF\" = ?;");
+			PrepStm.setInt(1, NewUser.getID());
+			PrepStm.setString(2, NewUser.getEmployee().getCF());
+			PrepStm.executeUpdate();
+			Conn.close();
+		} catch(SQLException e) {
+			System.out.println("SQL Exception:\n" + e);
+		}
+		
 	}
 	
 	@Override
@@ -66,6 +96,38 @@ public class UserFounderDAOPostgre extends DAOPostgre implements UserFounderDAO 
 		} catch(SQLException e) {
 			System.out.println("SQL Exception:\n" + e);
 		}
+		
+	}
+	
+	@Override
+	public String getPasswordByUserID(int UserID) {
+		
+		loadDriver();
+		
+		try {
+			Connection Conn = tryConnection();
+			PreparedStatement PrepStm = Conn.prepareStatement("SELECT \"Password\"\r\n"
+					+ "FROM public.\"User\"\r\n"
+					+ "WHERE \"ID\" = ?;");
+			PrepStm.setInt(1, UserID);
+			ResultSet rs = PrepStm.executeQuery();
+			
+			String Password;
+
+			if(rs.isBeforeFirst()) {
+				rs.next();
+				Password = rs.getString("Password");
+				Conn.close();
+				return Password;
+			} else {
+				Conn.close();
+				return null;
+			}
+
+		} catch(SQLException e) {
+			System.out.println("SQL Exception:\n" + e);
+		}
+		return null;
 		
 	}
 	

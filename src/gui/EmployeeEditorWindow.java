@@ -126,7 +126,6 @@ public class EmployeeEditorWindow extends GenericFrame {
 //			}
 //		});
 //	}
-
 	
 	/**
 	 *  Modality values guide:
@@ -137,7 +136,15 @@ public class EmployeeEditorWindow extends GenericFrame {
 	 */
 	
 	public EmployeeEditorWindow(int DisplayWidth, int DisplayHeight, int Modality) throws IntervalException {
+		
 		setBounds(DisplayWidth/2 - 340, DisplayHeight/2 - 450, 680, 900);
+		
+		if(Modality == 0) {
+			setBounds(DisplayWidth/2 - 340, DisplayHeight/2 - 450, 680, 900);
+		} else if(Modality == 1) {
+			setBounds(DisplayWidth/2 - 340, DisplayHeight/2 - 400, 680, 800);
+		}
+		
 		MainPanel = new JPanel();
 		setDefaultBorderDesign(MainPanel);
 		setDefaultDesign(this);
@@ -193,8 +200,7 @@ public class EmployeeEditorWindow extends GenericFrame {
 						try {
 							if(Modality == 0) {
 								// TODO Add Founder to the Employee table in db then go to user creation window
-								
-								// Adjust user informations and save them into temporary variables
+								// Adjust employee informations and save them into temporary variables
 								String Name = FirstNameTextField.getText().toUpperCase();
 								String Surname = LastNameTextField.getText().toUpperCase() + " " + SecondLastNameTextField.getText().toUpperCase();
 								String Email = EmailTextField.getText().toLowerCase();
@@ -216,7 +222,7 @@ public class EmployeeEditorWindow extends GenericFrame {
 								// All the new custom skills are added to NewSkillArrayList so that they can be added to the DB
 								for(int i = 0; i < EmployeeSkillList.getModel().getSize(); i++) {
 									for(int j = 0; j < SkillList.getModel().getSize(); j++) {
-										if(SkillArrayList.get(i).getName() == SkillList.getModel().getElementAt(j)) {
+										if(SkillArrayList.get(i).getName().toUpperCase() == SkillList.getModel().getElementAt(j).toUpperCase()) {
 											exists = true;
 											break;
 										}
@@ -248,8 +254,72 @@ public class EmployeeEditorWindow extends GenericFrame {
 								
 								// UserRegistrationWindow is opened to let the Employee link to an User
 								MainController.userRegistration(NewEmployee, true);
-							} 
-							// TODO Add StandardEmployeeRegistrationMode that has no salary option, verify the existence of the employee in the database, if the employee exist then go to user creation window
+							} else if(Modality == 1) {
+								// TODO Add StandardEmployeeRegistrationMode that has no salary option, verify the existence of the employee in the database, if the employee exist then go to user creation window
+								
+								// Adjust employee informations and save them into temporary variables
+								String Name = FirstNameTextField.getText().toUpperCase();
+								String Surname = LastNameTextField.getText().toUpperCase() + " " + SecondLastNameTextField.getText().toUpperCase();
+								String Email = EmailTextField.getText().toLowerCase();
+								float Salary = (float)SalarySpinner.getValue();
+								String TimeZone = (String)TimeZoneJComboBox.getSelectedItem();
+								ArrayList<Skill> SkillArrayList = new ArrayList<Skill>();
+								ArrayList<Skill> NewSkillArrayList = new ArrayList<Skill>();
+								
+								// Fill SkillArrayList with the skills chosen by the employee
+								for(int i = 0; i < EmployeeSkillList.getModel().getSize(); i++) {
+									SkillArrayList.add(new Skill(EmployeeSkillList.getModel().getElementAt(i)));
+								}
+								
+								// Exists variable to check if a certain skill is found
+								boolean exists = false;
+								
+								// All the new custom skills are added to NewSkillArrayList so that they can be added to the DB
+								for(int i = 0; i < EmployeeSkillList.getModel().getSize(); i++) {
+									for(int j = 0; j < SkillList.getModel().getSize(); j++) {
+										if(SkillArrayList.get(i).getName().toUpperCase() == SkillList.getModel().getElementAt(j).toUpperCase()) {
+											exists = true;
+											break;
+										}
+										exists = false;
+									}
+									if(!exists) {
+										NewSkillArrayList.add(SkillArrayList.get(i));
+									}
+								}
+								
+								// Creation of Employee object based on the informations given
+								Employee NewEmployee = new Employee(CF, Name, Surname, Email, Salary, TimeZone, SkillArrayList);
+								
+								if(!MainController.getEmployeeDAO().existsByCF(NewEmployee.getCF())) {
+									dispose();
+									MainController.displayMessageDialog("Error!", "You're not an employee of this corporation!");
+									MainController.start();
+								} else {
+									// If the account doesn't exists then create the account, otherwise notify the user with an error and return to login screen
+									if(MainController.getEmployeeDAO().getUserIDByCF(NewEmployee.getCF()) == 0) {
+										// If NewSkillArrayList contains at least one new custom skill then it's added to the DB
+										if(NewSkillArrayList.size() != 0) {
+											MainController.getSkillDAO().insertNewSkills(NewSkillArrayList);
+										}
+										
+										// The Employee is updated in the DB by CF without updating salary
+										MainController.getEmployeeDAO().updateEmployeeByCFNoSalary(NewEmployee);
+										
+										// EmployeeEditorWindow is closed
+										dispose();
+										
+										// UserRegistrationWindow is opened to let the Employee link to an User
+										MainController.userRegistration(NewEmployee, false);
+									} else {
+										dispose();
+										MainController.displayMessageDialog("Error!", "There is already an user associated with these informations!");
+										MainController.start();
+									}
+								}
+								
+							}
+							
 							
 							// TODO EmployeeCreationMode: the founder can add employees to the corporation
 							
@@ -257,26 +327,8 @@ public class EmployeeEditorWindow extends GenericFrame {
 						} catch (EmptyListException e1) {
 							e1.printStackTrace();
 						}
-						
 					}
 				}
-				
-				
-				
-//				if(FirstNameTextField.getText() != null && LastNameTextField.getText() != null) {
-//					if(FirstNameTextField.getText().isBlank() || LastNameTextField.getText().isBlank()) {
-//						MainController.displayMessageDialog("Error!", "Error: One or more text fields are missing!\n Please make sure to fill all of the required fields.");
-//					} else if (!checkRegistrationFieldsValidity(FirstNameTextField, LastNameTextField, SecondLastNameTextField)){
-//						MainController.displayMessageDialog("Error!", "Error: There are errors in some of the fields!");
-//					} else {
-//						MainController.displayConfirmationDialog("Automatically calculated CF", "The CF is equal to:\n" + calculateCF() + "\nMake sure the CF is correct, then click 'Ok' to continue. ");
-//						if(MainController.getConfirmationDialogValue()) {
-//							// TODO Go to next window
-//						}
-//					}
-//				} else {
-//					MainController.displayMessageDialog("Error!", "Error: One or more text fields are missing!\n Please make sure to fill all of the required fields.");
-//				}
 			}
 		});
 		setDefaultLineBorderButtonDesign(NextButton);
@@ -420,13 +472,18 @@ public class EmployeeEditorWindow extends GenericFrame {
 		setDefaultTextLabel(SalaryLabel);
 		
 		SalaryBackgroundLabel = new JLabel("Salary Label");
-		SalaryBackgroundLabel.setText("Insert the monthly salary of this person in the current corporation");
+		
+		if(Modality == 0) {
+			SalaryBackgroundLabel.setText("Insert your monthly salary in the current corporation");
+		} else {
+			SalaryBackgroundLabel.setText("Insert the monthly salary of this person in the current corporation");
+		}
 		setDefaultBackgroundTextLabel(SalaryBackgroundLabel);
 		
 		SalarySpinner = new JSpinner();
 		setDefaultJSpinner(SalarySpinner);
 		
-		if(Modality != 0) {
+		if(Modality != 0 || Modality != 2) {
 			SalarySpinner.setVisible(false);
 			SalaryBackgroundLabel.setVisible(false);
 			SalaryLabel.setVisible(false);
@@ -560,12 +617,15 @@ public class EmployeeEditorWindow extends GenericFrame {
 				.addGroup(gl_CentralPanel.createSequentialGroup()
 					.addGap(35)
 					.addGroup(gl_CentralPanel.createParallelGroup(Alignment.LEADING)
+						.addComponent(SalaryBackgroundLabel, GroupLayout.DEFAULT_SIZE, 639, Short.MAX_VALUE)
+						.addComponent(SalarySpinner, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+						.addComponent(SalaryLabel, GroupLayout.DEFAULT_SIZE, 639, Short.MAX_VALUE)
 						.addGroup(gl_CentralPanel.createSequentialGroup()
 							.addGap(0)
 							.addGroup(gl_CentralPanel.createParallelGroup(Alignment.LEADING, false)
 								.addComponent(SkillLabel, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
 								.addComponent(AdditionalInformationLabel, GroupLayout.PREFERRED_SIZE, 248, GroupLayout.PREFERRED_SIZE)
-								.addComponent(BottomSeparator, GroupLayout.PREFERRED_SIZE, 601, GroupLayout.PREFERRED_SIZE)
+								.addComponent(BottomSeparator, GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
 								.addGroup(gl_CentralPanel.createSequentialGroup()
 									.addGroup(gl_CentralPanel.createParallelGroup(Alignment.LEADING)
 										.addGroup(gl_CentralPanel.createSequentialGroup()
@@ -589,7 +649,7 @@ public class EmployeeEditorWindow extends GenericFrame {
 										.addComponent(SexJComboBox, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)))
 								.addComponent(DataPrivacyLabel, GroupLayout.PREFERRED_SIZE, 539, GroupLayout.PREFERRED_SIZE)
 								.addComponent(DetailsLabel)
-								.addComponent(TopSeparator, GroupLayout.PREFERRED_SIZE, 601, GroupLayout.PREFERRED_SIZE)
+								.addComponent(TopSeparator, GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
 								.addGroup(gl_CentralPanel.createSequentialGroup()
 									.addComponent(FirstNameLabel)
 									.addGap(141)
@@ -640,14 +700,9 @@ public class EmployeeEditorWindow extends GenericFrame {
 									.addGroup(gl_CentralPanel.createParallelGroup(Alignment.LEADING)
 										.addComponent(TimeZoneJComboBox, GroupLayout.PREFERRED_SIZE, 98, GroupLayout.PREFERRED_SIZE)
 										.addComponent(TimezoneBackgroundLabel)
-										.addComponent(TimeZoneLabel, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE))))
-							.addGap(38))
-						.addComponent(SalaryBackgroundLabel, GroupLayout.DEFAULT_SIZE, 639, Short.MAX_VALUE)
-						.addComponent(SalarySpinner, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
-						.addComponent(SalaryLabel, GroupLayout.DEFAULT_SIZE, 639, Short.MAX_VALUE)
-						.addGroup(gl_CentralPanel.createSequentialGroup()
-							.addComponent(SkillsBackgroundLabel, GroupLayout.PREFERRED_SIZE, 629, GroupLayout.PREFERRED_SIZE)
-							.addGap(0, 10, Short.MAX_VALUE)))
+										.addComponent(TimeZoneLabel, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)))
+								.addComponent(SkillsBackgroundLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addGap(38)))
 					.addContainerGap())
 		);
 		gl_CentralPanel.setVerticalGroup(
@@ -735,23 +790,23 @@ public class EmployeeEditorWindow extends GenericFrame {
 					.addGroup(gl_CentralPanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_CentralPanel.createSequentialGroup()
 							.addComponent(AddSkillButton, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+							.addGap(26)
 							.addComponent(RemoveSkillButton, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
-						.addComponent(SkillScrollPane, GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
-						.addComponent(EmployeeSkillScrollPane, GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
+						.addComponent(SkillScrollPane, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+						.addComponent(EmployeeSkillScrollPane, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_CentralPanel.createSequentialGroup()
 							.addComponent(CustomSkillTextField, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
 							.addComponent(AddCustomSkillButton, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(SkillsBackgroundLabel)
-					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGap(11)
 					.addComponent(SalaryLabel, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(SalarySpinner, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(SalaryBackgroundLabel)
-					.addGap(49))
+					.addGap(44))
 		);
 		
 		EmployeeSkillList = new JList<String>();
@@ -949,7 +1004,6 @@ public class EmployeeEditorWindow extends GenericFrame {
 		String NewSkill = CustomSkillTextField.getText();
 		
 		if(NewSkill != null) {
-			NewSkill = NewSkill.toLowerCase();
 			NewSkill = NewSkill.substring(0, 1).toUpperCase() + NewSkill.substring(1).toLowerCase();
 			if(!CurrentSkills.contains(NewSkill)) {
 				CurrentSkills.add(NewSkill);
@@ -1539,7 +1593,7 @@ public class EmployeeEditorWindow extends GenericFrame {
 		Pattern NamePattern = Pattern.compile("[a-zA-Z]+", Pattern.CASE_INSENSITIVE);
 		Pattern SurnamePattern = Pattern.compile("[a-zA-Z]+\s*[a-zA-Z]*", Pattern.CASE_INSENSITIVE);
 		Pattern SecondSurnamePattern = Pattern.compile("[a-zA-Z]*\s*[a-zA-Z]*", Pattern.CASE_INSENSITIVE);
-		Pattern EmailPattern = Pattern.compile("[a-zA-Z0-9!#%&'*+-/=?^_`{|]+@[a-zA-Z0-9-.]+\u002E[a-zA-Z]", Pattern.CASE_INSENSITIVE);
+		Pattern EmailPattern = Pattern.compile("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", Pattern.CASE_INSENSITIVE);
 		
 		Matcher NameMatcher = NamePattern.matcher(Name);
 		Matcher SurnameMatcher = SurnamePattern.matcher(Surname);

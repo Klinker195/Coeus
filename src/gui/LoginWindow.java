@@ -28,6 +28,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import controller.Controller;
+import exceptions.IntervalException;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -37,11 +39,12 @@ public class LoginWindow extends GenericFrame {
 	
 	private JPanel MainPanel;
 	
-	private JTextField UsernameJTextField;
-	private JPasswordField PasswordField;
+	private JTextField EmailTextField;
+	private JPasswordField PasswordTextField;
 	
 	private JButton ExitButton;
 	private JButton LoginButton;
+	private JButton SignInButton;
 	
 	
 	public LoginWindow(int DisplayWidth, int DisplayHeight) {
@@ -95,7 +98,28 @@ public class LoginWindow extends GenericFrame {
 		fl_LoginButtonPanel.setHgap(20);
 		RightPanel.add(LoginButtonPanel, BorderLayout.SOUTH);
 		
-		JButton LoginButton = new JButton("Login");
+		SignInButton = new JButton("Sign In");
+		SignInButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Add StandardUserRegistration call from MainController
+				try {
+					MainController.employeeRegistration(1);
+					dispose();
+				} catch (IntervalException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		setDefaultLineBorderButtonDesign(SignInButton);
+		LoginButtonPanel.add(SignInButton);
+		
+		LoginButton = new JButton("Login");
+		LoginButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// TODO Add login check using Employee and User DAOs
+				checkPassword(EmailTextField.getText(), MainController.encrypt(PasswordTextField.getPassword()));
+			}
+		});
 		setDefaultLineBorderButtonDesign(LoginButton);
 		LoginButtonPanel.add(LoginButton);
 		
@@ -103,10 +127,10 @@ public class LoginWindow extends GenericFrame {
 		RightPanel.add(SignUpPanel, BorderLayout.CENTER);
 		SignUpPanel.setLayout(new BorderLayout(10, 10));
 		
-		JLabel SignUpLabel = new JLabel("Sign Up");
-		SignUpLabel.setFont(new Font("Roboto Lt", Font.PLAIN, 34));
-		SignUpLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		SignUpPanel.add(SignUpLabel, BorderLayout.NORTH);
+		JLabel LoginLabel = new JLabel("Log In");
+		LoginLabel.setFont(new Font("Roboto Lt", Font.PLAIN, 34));
+		LoginLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		SignUpPanel.add(LoginLabel, BorderLayout.NORTH);
 		
 		JPanel UserInformationsPanel = new JPanel();
 		FlowLayout fl_UserInformationsPanel = (FlowLayout) UserInformationsPanel.getLayout();
@@ -114,17 +138,17 @@ public class LoginWindow extends GenericFrame {
 		fl_UserInformationsPanel.setHgap(10);
 		SignUpPanel.add(UserInformationsPanel, BorderLayout.CENTER);
 		
-		JLabel UsernameLabel = new JLabel("Username");
-		UsernameLabel.setForeground(Color.DARK_GRAY);
-		UsernameLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		UsernameLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
-		UsernameLabel.setPreferredSize(new Dimension(200, 20));
-		UserInformationsPanel.add(UsernameLabel);
+		JLabel EmailLabel = new JLabel("Email");
+		EmailLabel.setForeground(Color.DARK_GRAY);
+		EmailLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		EmailLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
+		EmailLabel.setPreferredSize(new Dimension(200, 20));
+		UserInformationsPanel.add(EmailLabel);
 		
-		UsernameJTextField = new JTextField();
-		UsernameJTextField.setFont(new Font("Roboto", Font.PLAIN, 14));
-		UsernameJTextField.setPreferredSize(new Dimension(200, 30));
-		UserInformationsPanel.add(UsernameJTextField);
+		EmailTextField = new JTextField();
+		EmailTextField.setFont(new Font("Roboto", Font.PLAIN, 14));
+		EmailTextField.setPreferredSize(new Dimension(200, 30));
+		UserInformationsPanel.add(EmailTextField);
 		
 		JLabel PasswordLabel = new JLabel("Password");
 		PasswordLabel.setForeground(Color.DARK_GRAY);
@@ -133,10 +157,30 @@ public class LoginWindow extends GenericFrame {
 		PasswordLabel.setFont(new Font("Roboto", Font.PLAIN, 14));
 		UserInformationsPanel.add(PasswordLabel);
 		
-		PasswordField = new JPasswordField();
-		PasswordField.setFont(new Font("Roboto", Font.PLAIN, 14));
-		PasswordField.setPreferredSize(new Dimension(200, 30));
-		UserInformationsPanel.add(PasswordField);
+		PasswordTextField = new JPasswordField();
+		PasswordTextField.setFont(new Font("Roboto", Font.PLAIN, 14));
+		PasswordTextField.setPreferredSize(new Dimension(200, 30));
+		UserInformationsPanel.add(PasswordTextField);
+	}
+	
+	public boolean checkPassword(String Email, String Password) {
+		
+		int UserID = MainController.getEmployeeDAO().getUserIDByEmail(Email);
+		
+		if(UserID == 0) {
+			MainController.displayMessageDialog("Error!", "There is no user associated with this email.");
+			return false;
+		} else {
+			if(Password.equals(MainController.getUserDAO().getPasswordByUserID(UserID))) {
+				// TODO Remove MessageDialog and go directly to software main page
+				MainController.displayMessageDialog("Success!", "Login successful!");
+				return true;
+			} else {
+				MainController.displayMessageDialog("Error!", "Incorrect password.");
+				return false;
+			}
+		}
+		
 	}
 	
 	private Image getImage(String filename) {

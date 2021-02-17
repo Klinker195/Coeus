@@ -13,34 +13,29 @@ public abstract class User {
 		private Employee Employee;
 		private ArrayList<MeetingInvitation> MeetingInvitationList = new ArrayList<MeetingInvitation>();
 		private ArrayList<Project> ProjectList = new ArrayList<Project>();
+		private ArrayList<Project> ManagingProjectList = new ArrayList<Project>();
 		
 		private Controller MainController = Controller.getIstance();
 
-		// USER WITH DEFAULT ID
-		protected User(String Password, Employee Employee, ArrayList<MeetingInvitation> MeetingInvitationList, ArrayList<Project> ProjectList) {
-			this.ID = 0;
-			this.Password = Password;
-			this.Employee = Employee;
-			this.MeetingInvitationList = MeetingInvitationList;
-			this.ProjectList = ProjectList;
-		}
+
 		
 		// ALL
-		protected User(int ID, String Password, Employee Employee, ArrayList<MeetingInvitation> MeetingInvitationList, ArrayList<Project> ProjectList) {
-			this(ID, Password, Employee, MeetingInvitationList);
+		protected User(int ID, String Password, Employee Employee, ArrayList<MeetingInvitation> MeetingInvitationList, ArrayList<Project> ProjectList, ArrayList<Project> ManagingProjectList) {
+			this(ID, Password, Employee, ProjectList, ManagingProjectList);
+			this.MeetingInvitationList = MeetingInvitationList;
+		}
+		
+		// NO MEETINGINVITATIONS
+		protected User(int ID, String Password, Employee Employee, ArrayList<Project> ProjectList, ArrayList<Project> ManagingProjectList) {
+			this(ID, Password, Employee);
 			this.ProjectList = ProjectList;
+			this.ManagingProjectList = ManagingProjectList;
 		}
 		
 		// NO PROJECTLIST
 		protected User(int ID, String Password, Employee Employee, ArrayList<MeetingInvitation> MeetingInvitationList) {
 			this(ID, Password, Employee);
 			this.MeetingInvitationList = MeetingInvitationList;
-		}
-		
-		// NO MEETINGINVITATIONS
-		protected User(int ID, String Password, ArrayList<Project> ProjectList, Employee Employee) {
-			this(ID, Password, Employee);
-			this.ProjectList = ProjectList;
 		}
 		
 		// NO PROJECTLIST NO MEETINGINVITATIONS
@@ -51,6 +46,12 @@ public abstract class User {
 			this.Employee = Employee;
 		}
 		
+		// USER WITH DEFAULT ID
+		protected User(String Password, Employee Employee) {
+			this.ID = 0;
+			this.Password = Password;
+			this.Employee = Employee;
+		}
 		
 		
 		public int getID() {
@@ -103,6 +104,22 @@ public abstract class User {
 		
 		public void removeProject(Project project) {
 			ProjectList.remove(project);
+		}
+		
+		public ArrayList<Project> getManagingProjectList() {
+			return ManagingProjectList;
+		}
+		
+		public void setManagingProjectList(ArrayList<Project> managingProjectList) {
+			ManagingProjectList = managingProjectList;
+		}
+		
+		public void addManagingProject(Project managingProject) {
+			ManagingProjectList.add(managingProject);
+		}
+		
+		public void removeManagingProject(Project managingProject) {
+			ManagingProjectList.remove(managingProject);
 		}
 		
 }

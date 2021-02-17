@@ -14,4 +14,10 @@ public interface EmployeeDAO {
 	
 	void deleteAllEmployees();
 	
+	int getUserIDByEmail(String Email);
+	
+	void updateEmployeeByCFNoSalary(Employee NewEmployee);
+
+	int getUserIDByCF(String CF);
+	
 }

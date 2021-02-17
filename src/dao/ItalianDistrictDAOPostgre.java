@@ -13,38 +13,13 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 	public ItalianDistrictDAOPostgre() {
 		
 	}
-	
-//	public static void main(String args[]) {
-//	
-//		ItalianDistrictDAO ItalianDistrictsDAO = new ItalianDistrictDAOPostgre();
-//	
-//	ArrayList<String> RegionNamesList = ItalianDistrictsDAO.getAllRegionNames();
-//	
-//	System.out.format(" [LISTA REGIONI ITALIANI]\n");
-//	for(String s : RegionNamesList) {
-//		System.out.println(" " + s);
-//	}
-//	System.out.format("\n\n");
-//	
-//	LinkedList<String> ProvinceAcronymsList = ItalianDistrictsDAO.getAllProvinceAcronymsByRegionName("Campania");
-//	
-//	System.out.format(" [LISTA ACRONIMI PROVINCE ITALIANE]\n");
-//	for(String s : ProvinceAcronymsList) {
-//		System.out.println(" " + s);
-//	}
-//	System.out.format("\n\n");
-//	
-//	LinkedList<String> DistrictNamesList = ItalianDistrictsDAO.getAllDistrictsByProvinceAcronym("NA");
-//	
-//	System.out.format(" [LISTA COMUNI ITALIANI]\n");
-//	for(String s : DistrictNamesList) {
-//		System.out.println(" " + s);
-//	}
-//	System.out.format("\n\n");
-//	
-//}
 
-
+	/**
+	 * Get all region names from the database.
+	 * @author CoeusDevTeam
+	 * @return A String ArrayList of all the region names fetched.
+	 * @see ArrayList
+	 */
 	@Override
 	public ArrayList<String> getAllRegionNames() {
 		
@@ -66,6 +41,13 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 		return null;
 	}
 	
+	/**
+	 * Get all province names from the database based on the region name.
+	 * @author CoeusDevTeam
+	 * @param RegionName -> A String representing the region name.
+	 * @return A String ArrayList of all the province names fetched.
+	 * @see ArrayList
+	 */
 	@Override
 	public ArrayList<String> getAllProvinceNameByRegionName(String RegionName) {
 		 
@@ -88,11 +70,15 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 		return null;
 	}
 	
-	
-	
-	
+	/**
+	 * Get all province acronyms from the database based on the region name.
+	 * @author CoeusDevTeam
+	 * @param RegionName -> A String representing the region name.
+	 * @return A String ArrayList of all the province acronyms fetched.
+	 * @see ArrayList
+	 */
 	@Override
-	public LinkedList<String> getAllProvinceAcronymsByRegionName(String RegionName) {
+	public ArrayList<String> getAllProvinceAcronymsByRegionName(String RegionName) {
 		
 		loadDriver();
 		
@@ -101,9 +87,9 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 			PreparedStatement PrepStm = Conn.prepareStatement("SELECT \"ProvinceAcronym\" FROM \"ItalianDistrict\" WHERE \"RegionName\" = ? GROUP BY \"ProvinceAcronym\"");
 			PrepStm.setString(1, RegionName);
 			ResultSet Rs = PrepStm.executeQuery();
-			LinkedList<String> tmpList = new LinkedList<String>();
+			ArrayList<String> tmpList = new ArrayList<String>();
 			while(Rs.next()) {
-				tmpList.addLast(Rs.getString("ProvinceAcronym"));
+				tmpList.add(Rs.getString("ProvinceAcronym"));
 			}
 			Conn.close();
 			return tmpList;
@@ -113,9 +99,16 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 		return null;
 		
 	}
-	
+
+	/**
+	 * Get all districts from the database based on the province acronym.
+	 * @author CoeusDevTeam
+	 * @param ProvinceAcronym -> A String representing the province acronym.
+	 * @return A String ArrayList of all the districts fetched.
+	 * @see ArrayList
+	 */
 	@Override
-	public LinkedList<String> getAllDistrictsByProvinceAcronym(String ProvinceAcronym) {
+	public ArrayList<String> getAllDistrictsByProvinceAcronym(String ProvinceAcronym) {
 		
 		loadDriver();
 		
@@ -124,9 +117,9 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 			PreparedStatement PrepStm = Conn.prepareStatement("SELECT \"DistrictName\" FROM \"ItalianDistrict\" WHERE \"ProvinceAcronym\" = ?");
 			PrepStm.setString(1, ProvinceAcronym);
 			ResultSet Rs = PrepStm.executeQuery();
-			LinkedList<String> tmpList = new LinkedList<String>();
+			ArrayList<String> tmpList = new ArrayList<String>();
 			while(Rs.next()) {
-				tmpList.addLast(Rs.getString("DistrictName"));
+				tmpList.add(Rs.getString("DistrictName"));
 			}
 			Conn.close();
 			return tmpList;
@@ -137,6 +130,13 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 		
 	}
 	
+	/**
+	 * Get all districts from the database based on the province name.
+	 * @author CoeusDevTeam
+	 * @param ProvinceName -> A String representing the province name.
+	 * @return A String ArrayList of all the districts fetched.
+	 * @see ArrayList
+	 */
 	@Override
 	public ArrayList<String> getAllDistrictsByProvinceName(String ProvinceName) {
 		
@@ -160,6 +160,13 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 		
 	}
 	
+	/**
+	 * Get district code from the database based on province name and district name.
+	 * @author CoeusDevTeam
+	 * @param ProvinceName -> A String representing the province name.
+	 * @param DistrictName -> A String representing the district name.
+	 * @return A String of the fetched district code.
+	 */
 	@Override
 	public String getDistrictCodeByProvinceAndDistrictName(String ProvinceName, String DistrictName) {
 		

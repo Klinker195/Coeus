@@ -9,9 +9,9 @@ public interface ItalianDistrictDAO {
 
 	ArrayList<String> getAllProvinceNameByRegionName(String RegionName);
 
-	LinkedList<String> getAllProvinceAcronymsByRegionName(String RegionName);
+	ArrayList<String> getAllProvinceAcronymsByRegionName(String RegionName);
 
-	LinkedList<String> getAllDistrictsByProvinceAcronym(String ProvinceAcronym);
+	ArrayList<String> getAllDistrictsByProvinceAcronym(String ProvinceAcronym);
 	
 	ArrayList<String> getAllDistrictsByProvinceName(String ProvinceName);
 	

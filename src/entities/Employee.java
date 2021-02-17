@@ -14,18 +14,11 @@ public class Employee {
 	private float Salary;
 	private String TimeZone;
 	
-	private User User = null;
 	private ArrayList<Skill> Skill;
 	
 	private Controller MainController = Controller.getIstance();
 	
-	// ALL 
-	public Employee(String CF, String Name, String Surname, String Email, String PhoneNumber, float Salary, String TimeZone, User User, ArrayList<Skill> Skill) throws EmptyListException {
-		this(CF, Name, Surname, Email, Salary, TimeZone, Skill);
-		this.User = User;
-	}
-	
-	// NO USER
+	// ALL
 	public Employee(String CF, String Name, String Surname, String Email, float Salary, String TimeZone, ArrayList<Skill> Skill) throws EmptyListException {
 		this.CF = CF;
 		this.Name = Name;
@@ -71,14 +64,6 @@ public class Employee {
 
 	public void setTimeZone(String timeZone) {
 		TimeZone = timeZone;
-	}
-
-	public User getUser() {
-		return User;
-	}
-
-	public void setUser(User user) {
-		User = user;
 	}
 	
 	public void setSkillList(ArrayList<Skill> skill) throws EmptyListException {

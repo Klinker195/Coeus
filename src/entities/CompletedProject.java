@@ -12,8 +12,8 @@ public class CompletedProject extends Project {
 	
 	private Controller MainController = Controller.getIstance();
 	
-	public CompletedProject(String Name, LocalDate StartingDate, LocalDate EndingDate, int MaxEmployee, String Modality, ArrayList<String> TopicList, ArrayList<User> UserList) throws EmptyListException {
-		super(Name, StartingDate, MaxEmployee, Modality, TopicList, UserList);
+	public CompletedProject(String Name, String Description, LocalDate StartingDate, LocalDate EndingDate, int MaxEmployee, Modality Modality, ArrayList<Topic> TopicList, ArrayList<User> UserList, User ProjectManager) throws EmptyListException {
+		super(Name, Description, StartingDate, MaxEmployee, Modality, TopicList, UserList, ProjectManager);
 		this.setEndingDate(EndingDate);
 	}
 
