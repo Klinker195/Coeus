@@ -1,15 +1,9 @@
 package entities;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
-
 import enums.InviteStatus;
-import exceptions.EmptyListException;
 
 public class MeetingInvitation {
 
-	private User User;
 	private Meeting Meeting;
 	private InviteStatus Status;
 	
@@ -40,18 +34,18 @@ public class MeetingInvitation {
 //		
 //	}
 	
-	public MeetingInvitation(User User, Meeting Meeting) {
+	public MeetingInvitation(Meeting Meeting) {
 		super();
-		this.User = User;
 		this.Meeting = Meeting;
 		this.Status = InviteStatus.PENDING;
 	}
-	
-	
-	public User getUser() {
-		return User;
-	}
 
+	public MeetingInvitation(Meeting Meeting, InviteStatus Status) {
+		super();
+		this.Meeting = Meeting;
+		this.Status = Status;
+	}
+	
 	public Meeting getMeeting() {
 		return Meeting;
 	}

@@ -5,7 +5,7 @@ public class Modality {
 	private String Name;
 	
 	public Modality(String Name) {
-		this.setName(Name);
+		this.Name = Name;
 	}
 
 	public String getName() {

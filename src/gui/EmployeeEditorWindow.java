@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dialog;
 
 import javax.swing.SwingConstants;
 import javax.swing.Timer;
@@ -26,16 +27,18 @@ import javax.swing.border.MatteBorder;
 import controller.Controller;
 import entities.Employee;
 import entities.Skill;
-import exceptions.EmptyListException;
 import exceptions.IntervalException;
 
 import java.awt.GridLayout;
+import java.awt.Window.Type;
+
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JTextField;
 import javax.swing.JFormattedTextField;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -69,11 +72,11 @@ import javax.swing.AbstractListModel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
-public class EmployeeEditorWindow extends GenericFrame {
+public class EmployeeEditorWindow extends GenericDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private Controller MainController = Controller.getIstance();
+	private Controller MainController = Controller.getInstance();
 	
 	private JPanel MainPanel;
 
@@ -146,6 +149,8 @@ public class EmployeeEditorWindow extends GenericFrame {
 		}
 		
 		MainPanel = new JPanel();
+		setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
+		setType(Type.UTILITY);
 		setDefaultBorderDesign(MainPanel);
 		setDefaultDesign(this);
 		setContentPane(MainPanel);
@@ -162,8 +167,8 @@ public class EmployeeEditorWindow extends GenericFrame {
 		TopPanel.add(TitlePanel, BorderLayout.WEST);
 		
 		JLabel CoeusLabel = new JLabel("Coeus");
-		CoeusLabel.setForeground(new Color(153, 51, 51));
-		CoeusLabel.setFont(new Font("Tahoma", Font.PLAIN, 70));
+		CoeusLabel.setForeground(new Color(15, 39, 115));
+		CoeusLabel.setFont(new Font("Roboto Bk", Font.PLAIN, 70));
 		TitlePanel.add(CoeusLabel);
 		
 		JPanel RightPanel = new JPanel();
@@ -176,7 +181,7 @@ public class EmployeeEditorWindow extends GenericFrame {
 		ExitButton = new JButton();
 		ExitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				dispose();
 			}
 		});
 		setDefaultExitButtonDesign(ExitButton);
@@ -198,134 +203,181 @@ public class EmployeeEditorWindow extends GenericFrame {
 					if(MainController.getConfirmationDialogValue()) {
 						
 						try {
-							if(Modality == 0) {
-								// TODO Add Founder to the Employee table in db then go to user creation window
-								// Adjust employee informations and save them into temporary variables
-								String Name = FirstNameTextField.getText().toUpperCase();
-								String Surname = LastNameTextField.getText().toUpperCase() + " " + SecondLastNameTextField.getText().toUpperCase();
-								String Email = EmailTextField.getText().toLowerCase();
-								float Salary = (float)SalarySpinner.getValue();
-								String TimeZone = (String)TimeZoneJComboBox.getSelectedItem();
-								ArrayList<Skill> SkillArrayList = new ArrayList<Skill>();
-								ArrayList<Skill> NewSkillArrayList = new ArrayList<Skill>();
+							SalarySpinner.commitEdit();
+						} catch (ParseException e1) {
+							e1.printStackTrace();
+						}
+						
+						if(Modality == 0) {
+							
+							// Adjust employee informations and save them into temporary variables
+							String Name = FirstNameTextField.getText().toUpperCase();
+							String Surname = LastNameTextField.getText().toUpperCase() + " " + SecondLastNameTextField.getText().toUpperCase();
+							String Email = EmailTextField.getText().toLowerCase();
+							float Salary = (float)SalarySpinner.getValue();
+							String TimeZone = (String)TimeZoneJComboBox.getSelectedItem();
+							ArrayList<Skill> SkillArrayList = new ArrayList<Skill>();
+							ArrayList<Skill> NewSkillArrayList = new ArrayList<Skill>();
+							
+							
+							// Fill SkillArrayList with the skills chosen by the creator of this employee
+							for(int i = 0; i < EmployeeSkillList.getModel().getSize(); i++) {
+								SkillArrayList.add(new Skill(EmployeeSkillList.getModel().getElementAt(i)));
+							}
 								
+							// Exists variable to check if a certain skill is found
+							boolean exists = false;
 								
-								// Fill SkillArrayList with the skills chosen by the creator of this employee
-								for(int i = 0; i < EmployeeSkillList.getModel().getSize(); i++) {
-									SkillArrayList.add(new Skill(EmployeeSkillList.getModel().getElementAt(i)));
-								}
-
-								
-								// Exists variable to check if a certain skill is found
-								boolean exists = false;
-								
-								// All the new custom skills are added to NewSkillArrayList so that they can be added to the DB
-								for(int i = 0; i < EmployeeSkillList.getModel().getSize(); i++) {
-									for(int j = 0; j < SkillList.getModel().getSize(); j++) {
-										if(SkillArrayList.get(i).getName().toUpperCase() == SkillList.getModel().getElementAt(j).toUpperCase()) {
-											exists = true;
-											break;
-										}
-										exists = false;
+							// All the new custom skills are added to NewSkillArrayList so that they can be added to the DB
+							for(int i = 0; i < EmployeeSkillList.getModel().getSize(); i++) {
+								for(int j = 0; j < SkillList.getModel().getSize(); j++) {
+									if(SkillArrayList.get(i).getName().toUpperCase() == SkillList.getModel().getElementAt(j).toUpperCase()) {
+										exists = true;
+										break;
 									}
-									if(!exists) {
-										NewSkillArrayList.add(SkillArrayList.get(i));
-									}
+									exists = false;
 								}
-								
-								// Creation of Employee object based on the informations given
-								Employee NewEmployee = new Employee(CF, Name, Surname, Email, Salary, TimeZone, SkillArrayList);
-								
-								// If NewSkillArrayList contains at least one new custom skill then it's added to the DB
-								if(NewSkillArrayList.size() != 0) {
-									MainController.getSkillDAO().insertNewSkills(NewSkillArrayList);
+								if(!exists) {
+									NewSkillArrayList.add(SkillArrayList.get(i));
 								}
-								
-								// When in Founder mode the employees are deleted before Founder Employee insertion
-								if(MainController.getEmployeeDAO().exists()) {
-									MainController.getEmployeeDAO().deleteAllEmployees();
-								}
-								
-								// The Employee is inserted in the DB
-								MainController.getEmployeeDAO().insertEmployee(NewEmployee);
-
-								// EmployeeEditorWindow is closed
-								dispose();
-								
-								// UserRegistrationWindow is opened to let the Employee link to an User
-								MainController.userRegistration(NewEmployee, true);
-							} else if(Modality == 1) {
-								// TODO Add StandardEmployeeRegistrationMode that has no salary option, verify the existence of the employee in the database, if the employee exist then go to user creation window
-								
-								// Adjust employee informations and save them into temporary variables
-								String Name = FirstNameTextField.getText().toUpperCase();
-								String Surname = LastNameTextField.getText().toUpperCase() + " " + SecondLastNameTextField.getText().toUpperCase();
-								String Email = EmailTextField.getText().toLowerCase();
-								float Salary = (float)SalarySpinner.getValue();
-								String TimeZone = (String)TimeZoneJComboBox.getSelectedItem();
-								ArrayList<Skill> SkillArrayList = new ArrayList<Skill>();
-								ArrayList<Skill> NewSkillArrayList = new ArrayList<Skill>();
-								
-								// Fill SkillArrayList with the skills chosen by the employee
-								for(int i = 0; i < EmployeeSkillList.getModel().getSize(); i++) {
-									SkillArrayList.add(new Skill(EmployeeSkillList.getModel().getElementAt(i)));
-								}
-								
-								// Exists variable to check if a certain skill is found
-								boolean exists = false;
-								
-								// All the new custom skills are added to NewSkillArrayList so that they can be added to the DB
-								for(int i = 0; i < EmployeeSkillList.getModel().getSize(); i++) {
-									for(int j = 0; j < SkillList.getModel().getSize(); j++) {
-										if(SkillArrayList.get(i).getName().toUpperCase() == SkillList.getModel().getElementAt(j).toUpperCase()) {
-											exists = true;
-											break;
-										}
-										exists = false;
-									}
-									if(!exists) {
-										NewSkillArrayList.add(SkillArrayList.get(i));
-									}
-								}
-								
-								// Creation of Employee object based on the informations given
-								Employee NewEmployee = new Employee(CF, Name, Surname, Email, Salary, TimeZone, SkillArrayList);
-								
-								if(!MainController.getEmployeeDAO().existsByCF(NewEmployee.getCF())) {
-									dispose();
-									MainController.displayMessageDialog("Error!", "You're not an employee of this corporation!");
-									MainController.start();
-								} else {
-									// If the account doesn't exists then create the account, otherwise notify the user with an error and return to login screen
-									if(MainController.getEmployeeDAO().getUserIDByCF(NewEmployee.getCF()) == 0) {
-										// If NewSkillArrayList contains at least one new custom skill then it's added to the DB
-										if(NewSkillArrayList.size() != 0) {
-											MainController.getSkillDAO().insertNewSkills(NewSkillArrayList);
-										}
-										
-										// The Employee is updated in the DB by CF without updating salary
-										MainController.getEmployeeDAO().updateEmployeeByCFNoSalary(NewEmployee);
-										
-										// EmployeeEditorWindow is closed
-										dispose();
-										
-										// UserRegistrationWindow is opened to let the Employee link to an User
-										MainController.userRegistration(NewEmployee, false);
-									} else {
-										dispose();
-										MainController.displayMessageDialog("Error!", "There is already an user associated with these informations!");
-										MainController.start();
-									}
-								}
-								
 							}
 							
+							// Creation of Employee object based on the informations given
+							Employee NewEmployee = new Employee(CF, Name, Surname, Email, Salary, TimeZone, SkillArrayList);
 							
-							// TODO EmployeeCreationMode: the founder can add employees to the corporation
+							// If NewSkillArrayList contains at least one new custom skill then it's added to the DB
+							if(NewSkillArrayList.size() != 0) {
+								MainController.getSkillDAO().insertNewSkills(NewSkillArrayList);
+							}
 							
-							// TODO Go to next window
-						} catch (EmptyListException e1) {
-							e1.printStackTrace();
+							// When in Founder mode the employees are deleted before Founder Employee insertion
+							if(MainController.getEmployeeDAO().exists()) {
+								MainController.getEmployeeDAO().deleteAllEmployees();
+							}
+							
+							// The Employee is inserted in the DB
+							MainController.getEmployeeDAO().insertEmployee(NewEmployee);
+
+							// EmployeeEditorWindow is closed
+							dispose();
+								
+							// UserRegistrationWindow is opened to let the Employee link to an User
+							MainController.userRegistration(NewEmployee, true);
+						} else if(Modality == 1) {
+							
+							// Adjust employee informations and save them into temporary variables
+							String Name = FirstNameTextField.getText().toUpperCase();
+							String Surname = LastNameTextField.getText().toUpperCase() + " " + SecondLastNameTextField.getText().toUpperCase();
+							String Email = EmailTextField.getText().toLowerCase();
+							float Salary = (float)SalarySpinner.getValue();
+							String TimeZone = (String)TimeZoneJComboBox.getSelectedItem();
+							ArrayList<Skill> SkillArrayList = new ArrayList<Skill>();
+							ArrayList<Skill> NewSkillArrayList = new ArrayList<Skill>();
+							
+							// Fill SkillArrayList with the skills chosen by the employee
+							for(int i = 0; i < EmployeeSkillList.getModel().getSize(); i++) {
+								SkillArrayList.add(new Skill(EmployeeSkillList.getModel().getElementAt(i)));
+							}
+							
+							// Exists variable to check if a certain skill is found
+							boolean exists = false;
+							
+							// All the new custom skills are added to NewSkillArrayList so that they can be added to the DB
+							for(int i = 0; i < EmployeeSkillList.getModel().getSize(); i++) {
+								for(int j = 0; j < SkillList.getModel().getSize(); j++) {
+									if(SkillArrayList.get(i).getName().toUpperCase().equals(SkillList.getModel().getElementAt(j).toUpperCase())) {
+										exists = true;
+										break;
+									}
+									exists = false;
+								}
+								if(!exists) {
+									NewSkillArrayList.add(SkillArrayList.get(i));
+								}
+							}
+								
+							// Creation of Employee object based on the informations given
+							Employee NewEmployee = new Employee(CF, Name, Surname, Email, Salary, TimeZone, SkillArrayList);
+							
+							if(!MainController.getEmployeeDAO().existsByCF(NewEmployee.getCF())) {
+								dispose();
+								MainController.displayMessageDialog("Error!", "You're not an employee of this corporation!");
+								MainController.start();
+							} else {
+								// If the account doesn't exists then create the account, otherwise notify the user with an error and return to login screen
+								if(!MainController.getUserDAO().existsByCF(CF)) {
+									// If NewSkillArrayList contains at least one new custom skill then it's added to the DB
+									if(NewSkillArrayList.size() != 0) {
+										MainController.getSkillDAO().insertNewSkills(NewSkillArrayList);
+									}
+									
+									// The Employee is updated in the DB by CF without updating salary
+									MainController.getEmployeeDAO().updateEmployeeByCFNoSalary(NewEmployee);
+									
+									// EmployeeEditorWindow is closed
+									dispose();
+									
+									// UserRegistrationWindow is opened to let the Employee link to an User
+									MainController.userRegistration(NewEmployee, false);
+								} else {
+									dispose();
+									MainController.displayMessageDialog("Error!", "There is already an user associated with these informations!");
+									MainController.start();
+								}
+							}		
+						} else if(Modality == 2) {
+							
+							// Adjust employee informations and save them into temporary variables
+							String Name = FirstNameTextField.getText().toUpperCase();
+							String Surname = LastNameTextField.getText().toUpperCase() + " " + SecondLastNameTextField.getText().toUpperCase();
+							String Email = EmailTextField.getText().toLowerCase();
+							float Salary = (float)SalarySpinner.getValue();
+							String TimeZone = (String)TimeZoneJComboBox.getSelectedItem();
+							ArrayList<Skill> SkillArrayList = new ArrayList<Skill>();
+							ArrayList<Skill> NewSkillArrayList = new ArrayList<Skill>();
+							
+							
+							// Fill SkillArrayList with the skills chosen by the creator of this employee
+							for(int i = 0; i < EmployeeSkillList.getModel().getSize(); i++) {
+								SkillArrayList.add(new Skill(EmployeeSkillList.getModel().getElementAt(i)));
+							}
+								
+							// Exists variable to check if a certain skill is found
+							boolean exists = false;
+								
+							// All the new custom skills are added to NewSkillArrayList so that they can be added to the DB
+							for(int i = 0; i < EmployeeSkillList.getModel().getSize(); i++) {
+								for(int j = 0; j < SkillList.getModel().getSize(); j++) {
+									if(SkillArrayList.get(i).getName().toUpperCase() == SkillList.getModel().getElementAt(j).toUpperCase()) {
+										exists = true;
+										break;
+									}
+									exists = false;
+								}
+								if(!exists) {
+									NewSkillArrayList.add(SkillArrayList.get(i));
+								}
+							}
+							
+							// Creation of Employee object based on the informations given
+							Employee NewEmployee = new Employee(CF, Name, Surname, Email, Salary, TimeZone, SkillArrayList);
+							
+							// If NewSkillArrayList contains at least one new custom skill then it's added to the DB
+							if(NewSkillArrayList.size() != 0) {
+								MainController.getSkillDAO().insertNewSkills(NewSkillArrayList);
+							}
+							
+							// The Employee is inserted in the DB
+							MainController.getEmployeeDAO().insertEmployee(NewEmployee);
+
+							// EmployeeEditorWindow is closed
+							dispose();
+							
+							MainController.displayConfirmationDialog("Success!", "The employee has been created successfully!");
+							
+							MainController.getCoeusProjectManagerWindow().resetActionEmployeePanelInfos();
+							MainController.getCoeusProjectManagerWindow().setEmployeesData();
+							
 						}
 					}
 				}
@@ -471,7 +523,7 @@ public class EmployeeEditorWindow extends GenericFrame {
 		SalaryLabel = new JLabel("Salary");
 		setDefaultTextLabel(SalaryLabel);
 		
-		SalaryBackgroundLabel = new JLabel("Salary Label");
+		SalaryBackgroundLabel = new JLabel("Salary");
 		
 		if(Modality == 0) {
 			SalaryBackgroundLabel.setText("Insert your monthly salary in the current corporation");
@@ -962,6 +1014,9 @@ public class EmployeeEditorWindow extends GenericFrame {
 			}
 		});
 		
+		SkillList.clearSelection();
+		EmployeeSkillList.clearSelection();
+		
 	}
 	
 	public void removeSkillList() {
@@ -991,37 +1046,47 @@ public class EmployeeEditorWindow extends GenericFrame {
 			}
 		});
 		
+		SkillList.clearSelection();
+		EmployeeSkillList.clearSelection();
+		
 	}
 	
 	public void addCustomSkill() {
 		
-		List<String> CurrentSkills = new ArrayList<String>();
-		
-		for(int i = 0; i < EmployeeSkillList.getModel().getSize(); i++) {
-			CurrentSkills.add(EmployeeSkillList.getModel().getElementAt(i));
+		if(!CustomSkillTextField.getText().isBlank()) {
+			
+			List<String> CurrentSkills = new ArrayList<String>();
+			
+			for(int i = 0; i < EmployeeSkillList.getModel().getSize(); i++) {
+				CurrentSkills.add(EmployeeSkillList.getModel().getElementAt(i));
+			}
+			
+			String NewSkill = CustomSkillTextField.getText();
+			
+			if(NewSkill != null) {
+				NewSkill = NewSkill.substring(0, 1).toUpperCase() + NewSkill.substring(1).toLowerCase();
+				if(!CurrentSkills.contains(NewSkill)) {
+					CurrentSkills.add(NewSkill);
+				}
+			}
+			
+			EmployeeSkillList.setModel(new AbstractListModel<String>() {
+				private static final long serialVersionUID = 1L;
+				String[] values = MainController.arrayListToStringArray((ArrayList<String>)CurrentSkills);
+				public int getSize() {
+					return values.length;
+				}
+				public String getElementAt(int index) {
+					return values[index];
+				}
+			});
+			
+			CustomSkillTextField.setText("");
+			
 		}
 		
-		String NewSkill = CustomSkillTextField.getText();
-		
-		if(NewSkill != null) {
-			NewSkill = NewSkill.substring(0, 1).toUpperCase() + NewSkill.substring(1).toLowerCase();
-			if(!CurrentSkills.contains(NewSkill)) {
-				CurrentSkills.add(NewSkill);
-			}
-		}
-		
-		EmployeeSkillList.setModel(new AbstractListModel<String>() {
-			private static final long serialVersionUID = 1L;
-			String[] values = MainController.arrayListToStringArray((ArrayList<String>)CurrentSkills);
-			public int getSize() {
-				return values.length;
-			}
-			public String getElementAt(int index) {
-				return values[index];
-			}
-		});
-		
-		CustomSkillTextField.setText("");
+		SkillList.clearSelection();
+		EmployeeSkillList.clearSelection();
 		
 	}
 	
@@ -1666,6 +1731,8 @@ public class EmployeeEditorWindow extends GenericFrame {
 		WorldStates = MainController.arrayListToStringArray(MainController.getWorldStateDAO().getAllStateNames());
 		RegionNames = MainController.arrayListToStringArray(MainController.getItalianDistrictDAO().getAllRegionNames());
 		
+		TimeZoneJComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"GMT+00:00", "GMT+01:00", "GMT+02:00", "GMT+03:00", "GMT+04:00", "GMT+05:00", "GMT+06:00", "GMT+07:00", "GMT+08:00", "GMT-01:00", "GMT-02:00", "GMT-03:00", "GMT-04:00", "GMT-05:00", "GMT-06:00", "GMT-07:00", "GMT-08:00"}));
+		
 		SexJComboBox.setModel(new DefaultComboBoxModel<Character>(new Character[] {'M', 'F'}));
 		
 		StateOfBirthJComboBox.setModel(new DefaultComboBoxModel<String>(WorldStates));
@@ -1674,8 +1741,6 @@ public class EmployeeEditorWindow extends GenericFrame {
 		YearJComboBox.setModel(new DefaultComboBoxModel<Integer>(MainController.intervalToIntegerArray(Calendar.getInstance().get(Calendar.YEAR) - 100, Calendar.getInstance().get(Calendar.YEAR) - 19)));
 		MonthJComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "Decemeber"}));
 		DayJComboBox.setModel(new DefaultComboBoxModel<Integer>(MainController.intervalToIntegerArray(1, 31)));
-		
-		TimeZoneJComboBox.setModel(new DefaultComboBoxModel<String>(new String[] {"GMT+00:00", "GMT+01:00", "GMT+02:00", "GMT+03:00", "GMT+04:00", "GMT+05:00", "GMT+06:00", "GMT+07:00", "GMT+08:00", "GMT-01:00", "GMT-02:00", "GMT-03:00", "GMT-04:00", "GMT-05:00", "GMT-06:00", "GMT-07:00", "GMT-08:00"}));
 		
 		SalarySpinner.setModel(new SpinnerNumberModel(new Float(600), new Float(0), new Float(50000), new Float(1)));
 		

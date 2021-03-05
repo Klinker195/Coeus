@@ -26,7 +26,7 @@ import javax.swing.SwingConstants;
 
 public class MessageDialog extends GenericDialog {
 
-	private Controller MainController = Controller.getIstance();
+	private Controller MainController = Controller.getInstance();
 	
 	private final JPanel MainPanel = new JPanel();
 	
@@ -45,6 +45,7 @@ public class MessageDialog extends GenericDialog {
 
 	public MessageDialog(String Title, String Text, int DisplayWidth, int DisplayHeight) {
 		
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
 		setDefaultDesign(this);
 		setBounds(DisplayWidth/2 - 226, DisplayHeight/2 - 151, 452, 302);
@@ -94,7 +95,7 @@ public class MessageDialog extends GenericDialog {
 				DocStyle.setParagraphAttributes(0, DocStyle.getLength(), center, false);
 				MessageTextPane.setText(setTextToCenter(Text));
 				setDefaultTextJTextPane(MessageTextPane);
-				MessageTextPane.setBackground(new Color(166, 111, 111));
+				MessageTextPane.setBackground(new Color(62, 100, 214));
 				MessageTextPane.setEditable(false);
 				CenterPanel.add(MessageTextPane);
 			}

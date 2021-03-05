@@ -3,7 +3,6 @@ package entities;
 import java.util.ArrayList;
 
 import controller.Controller;
-import exceptions.EmptyListException;
 
 public class Employee {
 
@@ -16,10 +15,10 @@ public class Employee {
 	
 	private ArrayList<Skill> Skill;
 	
-	private Controller MainController = Controller.getIstance();
+	private Controller MainController = Controller.getInstance();
 	
 	// ALL
-	public Employee(String CF, String Name, String Surname, String Email, float Salary, String TimeZone, ArrayList<Skill> Skill) throws EmptyListException {
+	public Employee(String CF, String Name, String Surname, String Email, float Salary, String TimeZone, ArrayList<Skill> Skill) {
 		this.CF = CF;
 		this.Name = Name;
 		this.Surname = Surname;
@@ -66,7 +65,7 @@ public class Employee {
 		TimeZone = timeZone;
 	}
 	
-	public void setSkillList(ArrayList<Skill> skill) throws EmptyListException {
+	public void setSkillList(ArrayList<Skill> skill) {
 		MainController.checkEmptyList(skill);
 		Skill = skill;
 	}

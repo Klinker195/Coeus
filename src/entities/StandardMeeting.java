@@ -4,17 +4,15 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import exceptions.EmptyListException;
 
 public class StandardMeeting extends Meeting {
 
 	private String Room;
 	
-	public StandardMeeting(int ID, LocalDate Date, LocalTime StartingTime, LocalTime EndingTime, String ProjectName, Project Project, ArrayList<User> User, String Room, ArrayList<MeetingInvitation> MeetingInvitationList) throws EmptyListException {
-		super(ID, Date, StartingTime, EndingTime, ProjectName, Project, User, MeetingInvitationList);
+	public StandardMeeting(String Title, LocalDate Date, LocalTime StartingTime, LocalTime EndingTime, Project Project, String Room) {
+		super(Title, Date, StartingTime, EndingTime, Project);
 		this.Room = Room;
 	}
-
 	
 	public String getRoom() {
 		return Room;

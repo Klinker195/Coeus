@@ -7,10 +7,8 @@ import java.sql.SQLException;
 public abstract class DAOPostgre {
 
 	/**
-	 * Checks the existance of a certain employee in the database based on the inserted CF.
+	 * Tries to load the Postgre Driver.
 	 * @author CoeusDevTeam
-	 * @param CF -> A string representing the employee's CF.
-	 * @return True if the employee exists, otherwise false.
 	 */
 	protected void loadDriver() {
 		try {

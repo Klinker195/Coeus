@@ -3,11 +3,9 @@ package entities;
 import java.util.ArrayList;
 
 import controller.Controller;
-import exceptions.EmptyListException;
 
 public abstract class User {
 
-		private int ID = 0;
 		private String Password;
 		
 		private Employee Employee;
@@ -15,52 +13,36 @@ public abstract class User {
 		private ArrayList<Project> ProjectList = new ArrayList<Project>();
 		private ArrayList<Project> ManagingProjectList = new ArrayList<Project>();
 		
-		private Controller MainController = Controller.getIstance();
+		private Controller MainController = Controller.getInstance();
 
 
 		
 		// ALL
-		protected User(int ID, String Password, Employee Employee, ArrayList<MeetingInvitation> MeetingInvitationList, ArrayList<Project> ProjectList, ArrayList<Project> ManagingProjectList) {
-			this(ID, Password, Employee, ProjectList, ManagingProjectList);
+		protected User(Employee Employee, String Password, ArrayList<MeetingInvitation> MeetingInvitationList, ArrayList<Project> ProjectList, ArrayList<Project> ManagingProjectList) {
+			this(Employee, Password, ProjectList, ManagingProjectList);
 			this.MeetingInvitationList = MeetingInvitationList;
 		}
 		
 		// NO MEETINGINVITATIONS
-		protected User(int ID, String Password, Employee Employee, ArrayList<Project> ProjectList, ArrayList<Project> ManagingProjectList) {
-			this(ID, Password, Employee);
+		protected User(Employee Employee, String Password, ArrayList<Project> ProjectList, ArrayList<Project> ManagingProjectList) {
+			this(Employee, Password);
 			this.ProjectList = ProjectList;
 			this.ManagingProjectList = ManagingProjectList;
 		}
 		
 		// NO PROJECTLIST
-		protected User(int ID, String Password, Employee Employee, ArrayList<MeetingInvitation> MeetingInvitationList) {
-			this(ID, Password, Employee);
+		protected User(Employee Employee, String Password, ArrayList<MeetingInvitation> MeetingInvitationList) {
+			this(Employee, Password);
 			this.MeetingInvitationList = MeetingInvitationList;
 		}
 		
 		// NO PROJECTLIST NO MEETINGINVITATIONS
-		protected User(int ID, String Password, Employee Employee) {
+		protected User(Employee Employee, String Password) {
 			super();
-			this.ID = ID;
 			this.Password = Password;
 			this.Employee = Employee;
 		}
 		
-		// USER WITH DEFAULT ID
-		protected User(String Password, Employee Employee) {
-			this.ID = 0;
-			this.Password = Password;
-			this.Employee = Employee;
-		}
-		
-		
-		public int getID() {
-			return ID;
-		}
-
-		public void setID(int iD) {
-			ID = iD;
-		}
 
 		public String getPassword() {
 			return Password;

@@ -5,28 +5,23 @@ import java.util.ArrayList;
 public class UserFounder extends User {
 
 	// ALL
-	public UserFounder(int ID, String Password, Employee Employee, ArrayList<MeetingInvitation> MeetingInvitationList, ArrayList<Project> ProjectList, ArrayList<Project> ManagingProjectList) {
-		super(ID, Password, Employee, MeetingInvitationList, ProjectList, ManagingProjectList);
+	public UserFounder(Employee Employee, String Password, ArrayList<MeetingInvitation> MeetingInvitationList, ArrayList<Project> ProjectList, ArrayList<Project> ManagingProjectList) {
+		super(Employee, Password, MeetingInvitationList, ProjectList, ManagingProjectList);
 	}
 	
 	// NO MEETINGINVITATIONS
-	public UserFounder(int ID, String Password, Employee Employee, ArrayList<Project> ProjectList, ArrayList<Project> ManagingProjectList) {
-		super(ID, Password, Employee, ProjectList, ManagingProjectList);
+	public UserFounder(Employee Employee, String Password, ArrayList<Project> ProjectList, ArrayList<Project> ManagingProjectList) {
+		super(Employee, Password, ProjectList, ManagingProjectList);
 	}
 	
 	// NO PROJECTLIST
-	public UserFounder(int ID, String Password, Employee Employee, ArrayList<MeetingInvitation> MeetingInvitationList) {
-		super(ID, Password, Employee, MeetingInvitationList);
+	public UserFounder(Employee Employee, String Password, ArrayList<MeetingInvitation> MeetingInvitationList) {
+		super(Employee, Password, MeetingInvitationList);
 	}
 	
 	// NO PROJECTLIST NO MEETINGINVITATIONS
-	public UserFounder(int ID, String Password, Employee Employee) {
-		super(ID, Password, Employee);
-	}
-	
-	// USER WITH DEFAULT ID
-	public UserFounder(String Password, Employee Employee) {
-		super(Password, Employee);
+	public UserFounder(Employee Employee, String Password) {
+		super(Employee, Password);
 	}
 
 }

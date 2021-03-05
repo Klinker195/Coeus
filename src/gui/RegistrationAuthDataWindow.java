@@ -2,9 +2,11 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Window.Type;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -26,9 +28,9 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JPasswordField;
 
-public class RegistrationAuthDataWindow extends GenericFrame {
+public class RegistrationAuthDataWindow extends GenericDialog {
 
-	private Controller MainController = Controller.getIstance();
+	private Controller MainController = Controller.getInstance();
 	
 	private JPanel MainPanel;
 	
@@ -39,6 +41,8 @@ public class RegistrationAuthDataWindow extends GenericFrame {
 
 	public RegistrationAuthDataWindow(Employee NewEmployee, boolean IsFounder, int DisplayWidth, int DisplayHeight) {
 		setBounds(DisplayWidth/2 - 340, DisplayHeight/2 - 188, 680, 376);
+		setModalityType(Dialog.DEFAULT_MODALITY_TYPE);
+		setType(Type.UTILITY);
 		MainPanel = new JPanel();
 		setDefaultBorderDesign(MainPanel);
 		setDefaultDesign(this);
@@ -56,8 +60,8 @@ public class RegistrationAuthDataWindow extends GenericFrame {
 		TopPanel.add(TitlePanel, BorderLayout.WEST);
 		
 		JLabel CoeusLabel = new JLabel("Coeus");
-		CoeusLabel.setForeground(new Color(153, 51, 51));
-		CoeusLabel.setFont(new Font("Tahoma", Font.PLAIN, 70));
+		CoeusLabel.setForeground(new Color(11, 28, 82));
+		CoeusLabel.setFont(new Font("Roboto Bk", Font.PLAIN, 70));
 		TitlePanel.add(CoeusLabel);
 		
 		JPanel RightPanel = new JPanel();
@@ -132,7 +136,7 @@ public class RegistrationAuthDataWindow extends GenericFrame {
 		ExitButton = new JButton();
 		ExitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				dispose();
 			}
 		});
 		setDefaultExitButtonDesign(ExitButton);
@@ -151,17 +155,16 @@ public class RegistrationAuthDataWindow extends GenericFrame {
 				} else {
 					if(MainController.getConfirmationDialogValue()) {
 						if(IsFounder) {
-							User NewFounder = new UserFounder(MainController.getUserDAO().getNewUserID(), MainController.encrypt(PasswordTextField.getPassword()), NewEmployee);
+							User NewFounder = new UserFounder(NewEmployee, String.copyValueOf(PasswordTextField.getPassword()));
 							MainController.getUserDAO().insertUserFounder(NewFounder);
 							dispose();
 							MainController.displayMessageDialog("Success!", "Your account has been successfully created!");
 							MainController.start();
 						} else {
-							User NewUser = new UserStandard(MainController.getUserDAO().getNewUserID(), MainController.encrypt(PasswordTextField.getPassword()), NewEmployee);
+							User NewUser = new UserStandard(NewEmployee, String.copyValueOf(PasswordTextField.getPassword()));
 							MainController.getUserDAO().insertStandardUser(NewUser);
 							dispose();
 							MainController.displayMessageDialog("Success!", "Your account has been successfully created!");
-							MainController.start();
 						}
 					}
 				}

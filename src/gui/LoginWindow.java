@@ -11,6 +11,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -32,10 +33,12 @@ import exceptions.IntervalException;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class LoginWindow extends GenericFrame {
 
-	private Controller MainController = Controller.getIstance();
+	private Controller MainController = Controller.getInstance();
 	
 	private JPanel MainPanel;
 	
@@ -56,20 +59,20 @@ public class LoginWindow extends GenericFrame {
 		MainPanel.setLayout(new GridLayout(1, 0, 0, 0));
 		
 		JPanel LeftPanel = new JPanel();
-		LeftPanel.setBackground(new Color(153, 51, 51));
+		LeftPanel.setBackground(new Color(62, 100, 214));
 		MainPanel.add(LeftPanel);
 		LeftPanel.setLayout(new BorderLayout(0, 0));
 		
 		JLabel AuthImageLabel = new JLabel("");
 		AuthImageLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		AuthImageLabel.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		AuthImageLabel.setFont(new Font("Roboto", Font.PLAIN, 11));
 		AuthImageLabel.setIcon(new ImageIcon(LoginWindow.class.getResource("/loginAuth.png")));
 		LeftPanel.add(AuthImageLabel, BorderLayout.CENTER);
 		
 		JLabel AuthenticationLabel = new JLabel("Authentication");
 		AuthenticationLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		AuthenticationLabel.setForeground(Color.WHITE);
-		AuthenticationLabel.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		AuthenticationLabel.setFont(new Font("Roboto", Font.PLAIN, 24));
 		LeftPanel.add(AuthenticationLabel, BorderLayout.SOUTH);
 		
 		JPanel RightPanel = new JPanel();
@@ -99,12 +102,10 @@ public class LoginWindow extends GenericFrame {
 		RightPanel.add(LoginButtonPanel, BorderLayout.SOUTH);
 		
 		SignInButton = new JButton("Sign In");
-		SignInButton.addActionListener(new ActionListener() {
+		SignInButton.addActionListener(new ActionListener()  {
 			public void actionPerformed(ActionEvent e) {
-				// TODO Add StandardUserRegistration call from MainController
 				try {
 					MainController.employeeRegistration(1);
-					dispose();
 				} catch (IntervalException e1) {
 					e1.printStackTrace();
 				}
@@ -117,7 +118,11 @@ public class LoginWindow extends GenericFrame {
 		LoginButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Add login check using Employee and User DAOs
-				checkPassword(EmailTextField.getText(), MainController.encrypt(PasswordTextField.getPassword()));
+				if(!EmailTextField.getText().isBlank() && !(PasswordTextField.getPassword().length == 0)) {
+					checkPassword(EmailTextField.getText(), MainController.encrypt(PasswordTextField.getPassword()));
+				} else {
+					MainController.displayMessageDialog("Error!", "There are some missing fields.");
+				}
 			}
 		});
 		setDefaultLineBorderButtonDesign(LoginButton);
@@ -158,6 +163,18 @@ public class LoginWindow extends GenericFrame {
 		UserInformationsPanel.add(PasswordLabel);
 		
 		PasswordTextField = new JPasswordField();
+		PasswordTextField.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					if(!EmailTextField.getText().isBlank() && !(PasswordTextField.getPassword().length == 0)) {
+						checkPassword(EmailTextField.getText(), MainController.encrypt(PasswordTextField.getPassword()));
+					} else {
+						MainController.displayMessageDialog("Error!", "There are some missing fields.");
+					}
+				}
+			}
+		});
 		PasswordTextField.setFont(new Font("Roboto", Font.PLAIN, 14));
 		PasswordTextField.setPreferredSize(new Dimension(200, 30));
 		UserInformationsPanel.add(PasswordTextField);
@@ -165,15 +182,27 @@ public class LoginWindow extends GenericFrame {
 	
 	public boolean checkPassword(String Email, String Password) {
 		
-		int UserID = MainController.getEmployeeDAO().getUserIDByEmail(Email);
+		String EmployeeCF = MainController.getEmployeeDAO().getCFByEmail(Email);
 		
-		if(UserID == 0) {
+		if(EmployeeCF == null) {
 			MainController.displayMessageDialog("Error!", "There is no user associated with this email.");
 			return false;
 		} else {
-			if(Password.equals(MainController.getUserDAO().getPasswordByUserID(UserID))) {
+			if(Password.equals(MainController.getUserDAO().getPasswordByEmployeeCF(EmployeeCF))) {
 				// TODO Remove MessageDialog and go directly to software main page
-				MainController.displayMessageDialog("Success!", "Login successful!");
+				dispose();
+				
+				MainController.getLoadingSplashWindow().setVisible(true);
+				
+				if(MainController.getUserDAO().isFounder(EmployeeCF)) {
+					MainController.openDashboard(MainController.getUserDAO().getUserByCF(EmployeeCF), 0);
+				} else if(MainController.getUserDAO().isAdmin(EmployeeCF)) {
+					MainController.openDashboard(MainController.getUserDAO().getUserByCF(EmployeeCF), 2);
+				} else {
+					MainController.openDashboard(MainController.getUserDAO().getUserByCF(EmployeeCF), 1);
+				}
+				
+				
 				return true;
 			} else {
 				MainController.displayMessageDialog("Error!", "Incorrect password.");
@@ -181,16 +210,6 @@ public class LoginWindow extends GenericFrame {
 			}
 		}
 		
-	}
-	
-	private Image getImage(String filename) {
-	    try {
-	        return ImageIO.read(getClass().getResourceAsStream(
-	                "/" + filename));
-	    } catch (IOException e) {
-	        e.printStackTrace();
-	        return null;
-	    }
 	}
 
 }

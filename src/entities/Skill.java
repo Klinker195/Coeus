@@ -5,7 +5,7 @@ import controller.Controller;
 public class Skill {
 
 	private String Name;
-	private Controller MainController = Controller.getIstance();
+	private Controller MainController = Controller.getInstance();
 	
 	public Skill(String Name) {
 		super();

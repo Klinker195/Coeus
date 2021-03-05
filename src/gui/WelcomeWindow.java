@@ -30,7 +30,7 @@ import java.awt.event.ActionEvent;
 
 public class WelcomeWindow extends GenericFrame {
 
-	private Controller MainController = Controller.getIstance();
+	private Controller MainController = Controller.getInstance();
 	
 	private JPanel MainPanel;
 	
@@ -52,7 +52,7 @@ public class WelcomeWindow extends GenericFrame {
 		
 		JLabel WelcomeToLabel = new JLabel("Welcome to\r\n");
 		WelcomeToLabel.setForeground(new Color(153, 51, 51));
-		WelcomeToLabel.setFont(new Font("Tahoma", Font.PLAIN, 80));
+		WelcomeToLabel.setFont(new Font("Roboto", Font.PLAIN, 80));
 		WelcomeToLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		CentralPanel.add(WelcomeToLabel, BorderLayout.NORTH);
 		
@@ -77,7 +77,7 @@ public class WelcomeWindow extends GenericFrame {
 		CoeusLabel.setVerticalAlignment(SwingConstants.TOP);
 		CoeusLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		CoeusLabel.setForeground(new Color(153, 51, 51));
-		CoeusLabel.setFont(new Font("Tahoma", Font.PLAIN, 80));
+		CoeusLabel.setFont(new Font("Roboto Bk", Font.PLAIN, 80));
 		CentralPanel.add(CoeusLabel, BorderLayout.CENTER);
 		
 		JPanel TopBarPanel = new JPanel();

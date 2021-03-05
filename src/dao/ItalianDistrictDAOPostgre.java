@@ -18,7 +18,6 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 	 * Get all region names from the database.
 	 * @author CoeusDevTeam
 	 * @return A String ArrayList of all the region names fetched.
-	 * @see ArrayList
 	 */
 	@Override
 	public ArrayList<String> getAllRegionNames() {
@@ -46,7 +45,6 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 	 * @author CoeusDevTeam
 	 * @param RegionName -> A String representing the region name.
 	 * @return A String ArrayList of all the province names fetched.
-	 * @see ArrayList
 	 */
 	@Override
 	public ArrayList<String> getAllProvinceNameByRegionName(String RegionName) {
@@ -75,7 +73,6 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 	 * @author CoeusDevTeam
 	 * @param RegionName -> A String representing the region name.
 	 * @return A String ArrayList of all the province acronyms fetched.
-	 * @see ArrayList
 	 */
 	@Override
 	public ArrayList<String> getAllProvinceAcronymsByRegionName(String RegionName) {
@@ -105,7 +102,6 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 	 * @author CoeusDevTeam
 	 * @param ProvinceAcronym -> A String representing the province acronym.
 	 * @return A String ArrayList of all the districts fetched.
-	 * @see ArrayList
 	 */
 	@Override
 	public ArrayList<String> getAllDistrictsByProvinceAcronym(String ProvinceAcronym) {
@@ -135,7 +131,6 @@ public class ItalianDistrictDAOPostgre extends DAOPostgre implements ItalianDist
 	 * @author CoeusDevTeam
 	 * @param ProvinceName -> A String representing the province name.
 	 * @return A String ArrayList of all the districts fetched.
-	 * @see ArrayList
 	 */
 	@Override
 	public ArrayList<String> getAllDistrictsByProvinceName(String ProvinceName) {

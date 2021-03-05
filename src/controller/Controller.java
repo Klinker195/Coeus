@@ -9,6 +9,7 @@ import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,6 +19,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.SwingWorker;
 
 import dao.*;
 import entities.*;
@@ -27,49 +29,68 @@ import gui.*;
 
 public class Controller {
 
-	private static Controller ControllerIstance = null;
+	private static Controller ControllerInstance = null;
 	
-	private GraphicsDevice GraphicDisplay = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-	private int DisplayWidth = GraphicDisplay.getDisplayMode().getWidth();
-	private int DisplayHeight = GraphicDisplay.getDisplayMode().getHeight();
+	private GraphicsDevice GraphicDisplay;
+	private int DisplayWidth;
+	private int DisplayHeight;
 	
-	private UserDAO UserDAO = new UserDAOPostgre();
-	private WorldStateDAO WorldStateDAO = new WorldStateDAOPostgre();
-	private ItalianDistrictDAO ItalianDistrictDAO = new ItalianDistrictDAOPostgre();
-	private SkillDAO SkillDAO = new SkillDAOPostgre();
-	private EmployeeDAO EmployeeDAO = new EmployeeDAOPostgre();
-	private TopicDAO TopicDAO = new TopicDAOPostgre();
+	private UserDAO UserDAO;
+	private WorldStateDAO WorldStateDAO;
+	private ItalianDistrictDAO ItalianDistrictDAO;
+	private SkillDAO SkillDAO;
+	private EmployeeDAO EmployeeDAO;
+	private MeetingDAO MeetingDAO;
+	private ProjectDAO ProjectDAO;
+	private MeetingInvitationDAO MeetingInvitationDAO;
+	
+	private SwingWorker<Boolean, Integer> SwingWorker;
 	
 	private LoginWindow LoginWindow;
 	private WelcomeWindow WelcomeWindow;
 	private EmployeeEditorWindow EmployeeRegistrationWindow;
 	private RegistrationAuthDataWindow AuthDataRegistrationWindow;
+	private CoeusProjectManagerWindow CoeusProjectManagerWindow;
+	private LoadingSplashWindow LoadingSplashWindow;
+	private ProjectMembersListWindow ProjectMembersListWindow;
+	private ProjectEditorWindow ProjectEditorWindow;
+	private ProjectUserSelectionWindow ProjectUserSelectionWindow;
+	private MeetingMembersListWindow MeetingMembersListWindow;
+	private MeetingEditorWindow MeetingEditorWindow;
+	private MeetingUserSelectionWindow MeetingUserSelectionWindow;
+	private SkillEditorWindow SkillEditorWindow;
+	private PersonalSkillEditorWindow PersonalSkillEditorWindow;
+	
 	
 	private MessageDialog MessageDialog;
 	private ConfirmationDialog ConfirmationDialog;
 
 	
 	private Controller() {
-		// The constructor's private so that it's impossible to create two or more instances of Controller.
+
 	}
 	
 	public static void main(String args[]) throws IntervalException {
 		
-		Controller MainController = Controller.getIstance();
+		Controller MainController = Controller.getInstance();
+		
+		MainController.init();
 		
 		MainController.start();
 		
 	}
 	
-	public static Controller getIstance() {
-		if(ControllerIstance == null)
-			ControllerIstance = new Controller();
+	public static Controller getInstance() {
+		if(ControllerInstance == null)
+			ControllerInstance = new Controller();
 		
-		return ControllerIstance;
+		return ControllerInstance;
 	}
 	
 	// Opens LoginScreen or to WelcomeWindow based on Founder existence
 	public void start() {
+		
+//		System.out.println(this.getClass().getSimpleName());
 		
 		if(UserDAO.searchFounder()) {
 			WelcomeWindow = new WelcomeWindow(DisplayWidth, DisplayHeight);
@@ -81,26 +102,58 @@ public class Controller {
 		
 	}
 	
+	public void openDashboard(User ConnectedUser, int Modality) {
+		
+		
+		SwingWorker = new SwingWorker<Boolean, Integer>() {
+
+			@Override
+			protected Boolean doInBackground() throws Exception {
+				
+				CoeusProjectManagerWindow.setProjectsData();
+				
+				return true;
+			}
+			
+			@Override
+			protected void done() {
+				
+				LoadingSplashWindow.setVisible(false);
+				CoeusProjectManagerWindow.setVisible(true);
+			}
+			
+		};
+		
+		if(CoeusProjectManagerWindow == null) {
+			CoeusProjectManagerWindow = new CoeusProjectManagerWindow(DisplayWidth, DisplayHeight, ConnectedUser, Modality);
+			SwingWorker.execute();
+			SwingWorker = null;
+		} else {
+			if(CoeusProjectManagerWindow.isVisible()) {
+				CoeusProjectManagerWindow.toFront();
+				System.out.println("RegistrationWindow is already visible!");
+			} else {
+				CoeusProjectManagerWindow.setVisible(true);
+			}
+		}
+		
+	}
+	
+	public LoadingSplashWindow getLoadingSplashWindow() {
+		return LoadingSplashWindow;
+	}
+
 	/**
 	 *  Modality values guide:
 	 *  Modality = 0 -> FounderMode;
-	 *  Modality = 1 -> UserRegistrationMode;
-	 *  Modality = 2 -> EmployeeCreationMode;
+	 *  Modality = 1 -> UserRegistrationMode; -> StandardUserMode
+	 *  Modality = 2 -> EmployeeCreationMode; -> When not for creation is for AdminMode
 	 */
 	public void employeeRegistration(int Modality) throws IntervalException {
 		
-		if(EmployeeRegistrationWindow == null) {
-			EmployeeEditorWindow RegistrationWindow = new EmployeeEditorWindow(DisplayWidth, DisplayHeight, Modality);
-			RegistrationWindow.setData();
-			RegistrationWindow.setVisible(true);
-		} else {
-			if(EmployeeRegistrationWindow.isVisible()) {
-				EmployeeRegistrationWindow.toFront();
-				System.out.println("RegistrationWindow is already visible!");
-			} else {
-				EmployeeRegistrationWindow.setVisible(true);
-			}
-		}
+		EmployeeRegistrationWindow = new EmployeeEditorWindow(DisplayWidth, DisplayHeight, Modality);
+		EmployeeRegistrationWindow.setData();
+		EmployeeRegistrationWindow.setVisible(true);
 		
 	}
 	
@@ -108,7 +161,7 @@ public class Controller {
 		
 		if(AuthDataRegistrationWindow == null) {
 			
-			RegistrationAuthDataWindow AuthDataRegistrationWindow = new RegistrationAuthDataWindow(NewEmployee, IsFounder, DisplayWidth, DisplayHeight);
+			AuthDataRegistrationWindow = new RegistrationAuthDataWindow(NewEmployee, IsFounder, DisplayWidth, DisplayHeight);
 			AuthDataRegistrationWindow.setVisible(true);
 		} else {
 			if(AuthDataRegistrationWindow.isVisible()) {
@@ -121,31 +174,110 @@ public class Controller {
 		
 	}
 	
-	public Integer[] intervalToIntegerArray(int Start, int End) throws IntervalException {
+	public void openPersonalSkillEditorWindow(User ConnectedUser) {
 		
-		if(Start > End) {
-			throw new IntervalException("Starting value should be greater than ending value.");
-		}
-		
-		ArrayList<Integer> IntegerList = new ArrayList<Integer>();
-		
-		for(Integer i = Start; i <= End; i++) {
-			IntegerList.add(i);
-		}
-		
-		return arrayListToIntegerArray(IntegerList);
+		PersonalSkillEditorWindow = new PersonalSkillEditorWindow(DisplayWidth, DisplayHeight, ConnectedUser);
+		PersonalSkillEditorWindow.setData(ConnectedUser);
+		PersonalSkillEditorWindow.setVisible(true);
 		
 	}
 	
-	public Integer[] arrayListToIntegerArray(ArrayList<Integer> ArrayList) {
+	public void openSkillEditorWindow(User ConnectedUser) {
 		
-		Integer[] IntegerArray = new Integer[ArrayList.size()];
+		SkillEditorWindow = new SkillEditorWindow(DisplayWidth, DisplayHeight, ConnectedUser);
+		SkillEditorWindow.setData();
+		SkillEditorWindow.setVisible(true);
 		
-		for(int i = 0; i < ArrayList.size(); i++) {
-			IntegerArray[i] = ArrayList.get(i);
+	}
+	
+	public void openProjectEditorWindow(User ConnectedUser) {
+		
+		ProjectEditorWindow = new ProjectEditorWindow(ConnectedUser, DisplayWidth, DisplayHeight);
+		ProjectEditorWindow.setData();
+		ProjectEditorWindow.setVisible(true);
+		
+	}
+	
+	public void openMeetingEditorWindow(User ConnectedUser) {
+		
+		MeetingEditorWindow = new MeetingEditorWindow(ConnectedUser, DisplayWidth, DisplayHeight);
+		MeetingEditorWindow.setData();
+		MeetingEditorWindow.setVisible(true);
+		
+	}
+	
+	public void openProjectMembersSelectionWindow(User ConnectedUser, Project Project) {
+		
+		ProjectUserSelectionWindow = new ProjectUserSelectionWindow(Project, ConnectedUser, DisplayWidth, DisplayHeight);
+		ProjectUserSelectionWindow.setData();
+		ProjectUserSelectionWindow.setVisible(true);
+	}
+	
+	public void openMeetingMembersSelectionWindow(User ConnectedUser, Integer MeetingID, Project Project) {
+		
+		MeetingUserSelectionWindow = new MeetingUserSelectionWindow(Project, MeetingID, ConnectedUser, DisplayWidth, DisplayHeight);
+		MeetingUserSelectionWindow.setData(Project);
+		MeetingUserSelectionWindow.setVisible(true);
+	}
+	
+	public void openProjectMembersList(User ConnectedUser, String ProjectName, String ProjectManagerCF) {
+		
+		if(ProjectMembersListWindow == null) {
+			
+			ProjectMembersListWindow = new ProjectMembersListWindow(DisplayWidth, DisplayHeight, ProjectName, ConnectedUser, ProjectManagerCF);
+			ProjectMembersListWindow.setData(ProjectName);
+			ProjectMembersListWindow.setVisible(true);
+		} else {
+			if(ProjectMembersListWindow.isVisible()) {
+				ProjectMembersListWindow.toFront();
+				System.out.println("AuthDataRegistrationWindow is already visible!");
+			} else {
+				ProjectMembersListWindow.setData(ProjectName);
+				ProjectMembersListWindow.setVisible(true);
+			}
 		}
 		
-		return IntegerArray;
+	}
+	
+	public void openMeetingMembersList(User ConnectedUser, String ProjectName, Integer MeetingID) {
+		
+		if(MeetingMembersListWindow == null) {
+			
+			MeetingMembersListWindow = new MeetingMembersListWindow(DisplayWidth, DisplayHeight, MeetingID, ProjectName, ConnectedUser);
+			MeetingMembersListWindow.setData(MeetingID, ProjectName);
+			MeetingMembersListWindow.setVisible(true);
+		} else {
+			if(MeetingMembersListWindow.isVisible()) {
+				MeetingMembersListWindow.toFront();
+				System.out.println("AuthDataRegistrationWindow is already visible!");
+			} else {
+				MeetingMembersListWindow.setData(MeetingID, ProjectName);
+				MeetingMembersListWindow.setVisible(true);
+			}
+		}
+		
+	}
+	
+	public Integer[] intervalToIntegerArray(int Start, int End) {
+		
+		try {
+			
+			if(Start > End) {
+				throw new IntervalException("Starting value should be greater than ending value.");
+			}
+			
+			Integer[] IntegerArray = new Integer[End - Start + 1];
+			
+			for(Integer i = Start; i <= End; i++) {
+				IntegerArray[i - Start] = i;
+			}
+			
+			return IntegerArray;
+			
+		} catch(IntervalException e) {
+			System.out.println("IntervalException: " + e);
+		}
+		return null;
 		
 	}
 	
@@ -187,17 +319,14 @@ public class Controller {
 		
 	}
 	
-	public <E> boolean checkEmptyList(ArrayList<E> List) throws EmptyListException {
+	public <E> boolean checkEmptyList(ArrayList<E> List) {
 		
 		if(List != null) {
 			if(!List.isEmpty()) {
 				return true;
-			} else {
-				throw new EmptyListException();
 			}
-		} else {
-			throw new EmptyListException();
 		}
+		return false;
 		
 	}
 	
@@ -214,7 +343,7 @@ public class Controller {
             
             int j = 0;
             
-            for(j = 0; i < RotAlphabet.length; j++) {
+            for(j = 0; j < RotAlphabet.length; j++) {
             	if(letter == RotAlphabet[j]) break;
             }
             
@@ -234,6 +363,24 @@ public class Controller {
         return new String(Password);
     }
 	
+    public void init() {
+		GraphicDisplay = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		DisplayWidth = GraphicDisplay.getDisplayMode().getWidth();
+		DisplayHeight = GraphicDisplay.getDisplayMode().getHeight();
+		
+		LoadingSplashWindow = new LoadingSplashWindow(DisplayWidth, DisplayHeight);
+		
+		UserDAO = new UserDAOPostgre();
+		WorldStateDAO = new WorldStateDAOPostgre();
+		ItalianDistrictDAO = new ItalianDistrictDAOPostgre();
+		SkillDAO = new SkillDAOPostgre();
+		EmployeeDAO = new EmployeeDAOPostgre();
+		MeetingDAO = new MeetingDAOPostgre();
+		ProjectDAO = new ProjectDAOPostgre();
+		MeetingInvitationDAO = new MeetingInvitationDAOPostgre();
+		
+    }
+    
 	public UserDAO getUserDAO() {
 		return UserDAO;
 	}
@@ -254,12 +401,32 @@ public class Controller {
 		return EmployeeDAO;
 	}
 
-	public TopicDAO getTopicDAO() {
-		return TopicDAO;
+	public MeetingDAO getMeetingDAO() {
+		return MeetingDAO;
 	}
 
-	public void setTopicDAO(TopicDAO topicDAO) {
-		TopicDAO = topicDAO;
+	public void setMeetingDAO(MeetingDAO meetingDAO) {
+		MeetingDAO = meetingDAO;
+	}
+
+	public ProjectDAO getProjectDAO() {
+		return ProjectDAO;
+	}
+
+	public void setProjectDAO(ProjectDAO projectDAO) {
+		ProjectDAO = projectDAO;
+	}
+
+	public CoeusProjectManagerWindow getCoeusProjectManagerWindow() {
+		return CoeusProjectManagerWindow;
+	}
+
+	public ProjectUserSelectionWindow getProjectUserSelectionWindow() {
+		return ProjectUserSelectionWindow;
+	}
+
+	public MeetingInvitationDAO getMeetingInvitationDAO() {
+		return MeetingInvitationDAO;
 	}
 	
 }
