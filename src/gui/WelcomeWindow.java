@@ -51,7 +51,7 @@ public class WelcomeWindow extends GenericFrame {
 		CentralPanel.setLayout(new BorderLayout(0, 0));
 		
 		JLabel WelcomeToLabel = new JLabel("Welcome to\r\n");
-		WelcomeToLabel.setForeground(new Color(153, 51, 51));
+		WelcomeToLabel.setForeground(new Color(11, 28, 82));
 		WelcomeToLabel.setFont(new Font("Roboto", Font.PLAIN, 80));
 		WelcomeToLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		CentralPanel.add(WelcomeToLabel, BorderLayout.NORTH);
@@ -76,7 +76,7 @@ public class WelcomeWindow extends GenericFrame {
 		JLabel CoeusLabel = new JLabel("Coeus\r\n");
 		CoeusLabel.setVerticalAlignment(SwingConstants.TOP);
 		CoeusLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		CoeusLabel.setForeground(new Color(153, 51, 51));
+		CoeusLabel.setForeground(new Color(11, 28, 82));
 		CoeusLabel.setFont(new Font("Roboto Bk", Font.PLAIN, 80));
 		CentralPanel.add(CoeusLabel, BorderLayout.CENTER);
 		

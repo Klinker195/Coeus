@@ -9,8 +9,6 @@ public class CompletedProject extends Project {
 
 	private LocalDate EndingDate;
 	
-	private Controller MainController = Controller.getInstance();
-	
 	// ALL
 	public CompletedProject(String Name, String Description, LocalDate StartingDate, LocalDate EndingDate, int MaxEmployee, String Modality, ArrayList<String> TopicList, ArrayList<Meeting> MeetingList) {
 		super(Name, Description, StartingDate, MaxEmployee, Modality, TopicList, MeetingList);

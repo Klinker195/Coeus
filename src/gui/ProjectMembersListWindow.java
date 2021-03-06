@@ -50,9 +50,6 @@ public class ProjectMembersListWindow extends GenericDialog {
 
 	private Controller MainController = Controller.getInstance();
 
-	/**
-	 * Create the frame.
-	 */
 	public ProjectMembersListWindow(int DisplayWidth, int DisplayHeight, String ProjectName, User ConnectedUser, String ProjectManagerCF) {
 		
 		this.ProjectName = ProjectName;

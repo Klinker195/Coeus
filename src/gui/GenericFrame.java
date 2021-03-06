@@ -34,7 +34,7 @@ import javax.swing.border.MatteBorder;
 
 public abstract class GenericFrame extends JFrame {
 	
-	public void setDefaultDesign(JFrame Frame) {
+	protected void setDefaultDesign(JFrame Frame) {
 		Frame.setUndecorated(true);
 		Frame.setTitle("Coeus Project Manager");
 		Frame.setIconImage(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("appIcon.png")));
@@ -42,17 +42,17 @@ public abstract class GenericFrame extends JFrame {
 		Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	public void setDefaultBorderDesign(JPanel MainPanel) {
+	protected void setDefaultBorderDesign(JPanel MainPanel) {
 		MainPanel.setBorder(new LineBorder(new Color(6, 20, 64), 3));
 	}
 	
-	public void setDefaultBackgroundDesign(JPanel Panel) {
+	protected void setDefaultBackgroundDesign(JPanel Panel) {
 //		Panel.setBackground(new Color(166, 111, 111));
 		
 		Panel.setBackground(new Color(62, 100, 214));
 	}
 	
-	public void setDefaultExitButtonDesign(JButton ExitButton) {
+	protected void setDefaultExitButtonDesign(JButton ExitButton) {
 		
 		ExitButton.setText("X");
 		ExitButton.addMouseListener(new MouseAdapter() {
@@ -72,7 +72,7 @@ public abstract class GenericFrame extends JFrame {
 		
 	}
 	
-	public void setDefaultActionButtonDesign(JButton ActionButton) {
+	protected void setDefaultActionButtonDesign(JButton ActionButton) {
 		ActionButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -87,7 +87,7 @@ public abstract class GenericFrame extends JFrame {
 		
 	}
 	
-	public void setDefaultLineBorderButtonDesign(JButton LineBorderButton) {
+	protected void setDefaultLineBorderButtonDesign(JButton LineBorderButton) {
 		LineBorderButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -103,7 +103,7 @@ public abstract class GenericFrame extends JFrame {
 		LineBorderButton.setMargin(new Insets(100, 100, 100, 100));
 	}
 	
-	public void setDefaultJSeparator(JSeparator Separator) {
+	protected void setDefaultJSeparator(JSeparator Separator) {
 //		Separator.setBackground(new Color(122, 72, 72));
 //		Separator.setForeground(new Color(122, 72, 72));
 		
@@ -111,39 +111,39 @@ public abstract class GenericFrame extends JFrame {
 		Separator.setForeground(new Color(31, 60, 148));
 	}
 	
-	public void setDefaultJComboBox(JComboBox ComboBox) {
+	protected void setDefaultJComboBox(JComboBox ComboBox) {
 		ComboBox.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
 	}
 	
-	public void setDefaultJSpinner(JSpinner Spinner) {
+	protected void setDefaultJSpinner(JSpinner Spinner) {
 		Spinner.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
 	}
 	
-	public void setDefaultJScrollPane(JScrollPane ScrollPane) {
+	protected void setDefaultJScrollPane(JScrollPane ScrollPane) {
 		ScrollPane.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
 	}
 	
-	public void setDefaultJTextFieldDesign(JTextField TextField) {
+	protected void setDefaultJTextFieldDesign(JTextField TextField) {
 		TextField.setColumns(10);
 		TextField.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
 	}
 	
-	public void setDefaultJPasswordFieldDesign(JPasswordField PasswordField) {
+	protected void setDefaultJPasswordFieldDesign(JPasswordField PasswordField) {
 		PasswordField.setColumns(10);
 		PasswordField.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
 	}
 	
-	public void setDefaultHeaderTextLabel(JLabel Label) {
+	protected void setDefaultHeaderTextLabel(JLabel Label) {
 		Label.setFont(new Font("Roboto", Font.BOLD, 16));
 		Label.setForeground(new Color(6, 20, 64));
 	}
 	
-	public void setDefaultTextLabel(JLabel Label) {
+	protected void setDefaultTextLabel(JLabel Label) {
 		Label.setFont(new Font("Roboto", Font.PLAIN, 14));
 		Label.setForeground(new Color(6, 20, 64));
 	}
 	
-	public void setDefaultBackgroundTextLabel(JLabel Label) {
+	protected void setDefaultBackgroundTextLabel(JLabel Label) {
 		Label.setFont(new Font("Roboto", Font.BOLD, 11));
 		
 		Label.setForeground(new Color(31, 60, 148));
@@ -151,7 +151,7 @@ public abstract class GenericFrame extends JFrame {
 //		Label.setForeground(new Color(122, 72, 72));
 	}
 	
-	public void deleteFieldThreshold(JTextField TextField) {
+	protected void deleteFieldThreshold(JTextField TextField) {
 		
 		String String = TextField.getText();
 		
@@ -162,7 +162,7 @@ public abstract class GenericFrame extends JFrame {
 		
 	}
 	
-	public void deleteFieldSpaces(JTextField TextField) {
+	protected void deleteFieldSpaces(JTextField TextField) {
 		
 		String String = TextField.getText();
 		
@@ -172,65 +172,6 @@ public abstract class GenericFrame extends JFrame {
 		} 
 		
 	}
-	
 
-	
-//	public boolean checkPasswordCharacters(char[] PasswordCharArray) {
-//		
-//		final char[] ValidCharacters = {'!', '#', '%', '&', '\'', '*', '+', '-', '/', '=', '?', '^', '_', '.', '{', '|', 'b', 'Y', 'f', 'M',
-//    			'k', 'A', 'x', 'W', 'o', 'L', 'h', 'R', 't', 'G', 'l', 'P', 'a', 'Z', 'g', 'J', 'z', 'D', 's', 'U', 'w', 'X', 'i', 'N', 'r', 'K',
-//    			'c', 'F', 'v', 'B', 'u', 'S', 'm', 'H', 'y', 'E', 'd', 'V', 'e', 'T', 'p', 'Q', 'j', 'O', 'n', 'I', 'q', 'C', '4', '8', '3', '5',
-//    			'0', '1', '2', '9', '7', '6'};
-//		
-//		boolean valid;
-//		
-//		for(int i = 0; i < PasswordCharArray.length; i++) {
-//			valid = false;
-//			for(int j = 0; j < ValidCharacters.length; j++) {
-//				if(PasswordCharArray[i] == ValidCharacters[j]) {
-//					valid = true;
-//					break;
-//				}
-//			}
-//			if(!valid) {
-//				return false;
-//			}
-//		}
-//		return true;
-//		
-//	}
-//	
-//	public boolean checkAuthRegistrationFieldsValidity(JPasswordField PasswordField, JPasswordField ConfirmationPasswordField) {
-//		
-//		char[] PasswordCharArray = PasswordField.getPassword();
-//		char[] ConfirmationPasswordCharArray = ConfirmationPasswordField.getPassword();
-//		
-//		if(!Arrays.equals(PasswordCharArray, ConfirmationPasswordCharArray) || !checkPasswordCharacters(PasswordCharArray)) {
-//			
-//			if(!checkPasswordCharacters(PasswordCharArray)) {
-//				PasswordField.setBorder(new MatteBorder(1, 1, 1, 1, Color.red));
-//			} else {
-//				PasswordField.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
-//			}
-//			
-//			if(!Arrays.equals(PasswordCharArray, ConfirmationPasswordCharArray)) {
-//				PasswordField.setBorder(new MatteBorder(1, 1, 1, 1, Color.red));
-//				ConfirmationPasswordField.setBorder(new MatteBorder(1, 1, 1, 1, Color.red));
-//			} else {
-//				PasswordField.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
-//				ConfirmationPasswordField.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
-//			}
-//			
-//			Arrays.fill(PasswordCharArray, '0');
-//			Arrays.fill(ConfirmationPasswordCharArray, '0');
-//			return false;
-//		} else {
-//			PasswordField.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
-//			ConfirmationPasswordField.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
-//			return true;
-//		}
-//		
-//	}
-	
 	
 }

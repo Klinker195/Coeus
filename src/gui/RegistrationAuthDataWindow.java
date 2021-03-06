@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -60,6 +61,7 @@ public class RegistrationAuthDataWindow extends GenericDialog {
 		TopPanel.add(TitlePanel, BorderLayout.WEST);
 		
 		JLabel CoeusLabel = new JLabel("Coeus");
+		CoeusLabel.setIcon(new ImageIcon(LoginWindow.class.getResource("/coeusIconLabel.png")));
 		CoeusLabel.setForeground(new Color(11, 28, 82));
 		CoeusLabel.setFont(new Font("Roboto Bk", Font.PLAIN, 70));
 		TitlePanel.add(CoeusLabel);

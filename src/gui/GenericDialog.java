@@ -29,22 +29,22 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
-public class GenericDialog extends JDialog {
+public abstract class GenericDialog extends JDialog {
 
-	public void setDefaultDesign(JDialog Dialog) {
+	protected void setDefaultDesign(JDialog Dialog) {
 		Dialog.setResizable(false);
 		Dialog.setUndecorated(true);
 	}
 	
-	public void setDefaultBorderDesign(JPanel MainPanel) {
+	protected void setDefaultBorderDesign(JPanel MainPanel) {
 		MainPanel.setBorder(new LineBorder(new Color(6, 20, 64), 3));
 	}
 	
-	public void setDefaultBackgroundDesign(JPanel Panel) {
+	protected void setDefaultBackgroundDesign(JPanel Panel) {
 		Panel.setBackground(new Color(62, 100, 214));
 	}
 	
-	public void setDefaultExitButtonDesign(JButton ExitButton) {
+	protected void setDefaultExitButtonDesign(JButton ExitButton) {
 		
 		ExitButton.setText("X");
 		ExitButton.addMouseListener(new MouseAdapter() {
@@ -64,7 +64,7 @@ public class GenericDialog extends JDialog {
 		
 	}
 	
-	public void setDefaultActionButtonDesign(JButton ActionButton) {
+	protected void setDefaultActionButtonDesign(JButton ActionButton) {
 		ActionButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -79,16 +79,16 @@ public class GenericDialog extends JDialog {
 		
 	}
 	
-	public void setDefaultJScrollPane(JScrollPane ScrollPane) {
+	protected void setDefaultJScrollPane(JScrollPane ScrollPane) {
 		ScrollPane.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
 	}
 	
-	public void setDefaultJPasswordFieldDesign(JPasswordField PasswordField) {
+	protected void setDefaultJPasswordFieldDesign(JPasswordField PasswordField) {
 		PasswordField.setColumns(10);
 		PasswordField.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
 	}
 	
-	public void setDefaultLineBorderButtonDesign(JButton LineBorderButton) {
+	protected void setDefaultLineBorderButtonDesign(JButton LineBorderButton) {
 		LineBorderButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -108,7 +108,7 @@ public class GenericDialog extends JDialog {
 		LineBorderButton.setMargin(new Insets(100, 100, 100, 100));
 	}
 	
-	public void setDefaultJSeparator(JSeparator Separator) {
+	protected void setDefaultJSeparator(JSeparator Separator) {
 //		Separator.setBackground(new Color(122, 72, 72));
 //		Separator.setForeground(new Color(122, 72, 72));
 		
@@ -116,40 +116,40 @@ public class GenericDialog extends JDialog {
 		Separator.setForeground(new Color(31, 60, 148));
 	}
 	
-	public void setDefaultHeaderTextLabel(JLabel Label) {
+	protected void setDefaultHeaderTextLabel(JLabel Label) {
 		Label.setFont(new Font("Roboto", Font.BOLD, 16));
 		Label.setForeground(new Color(6, 20, 64));
 	}
 	
-	public void setDefaultTextLabel(JLabel Label) {
+	protected void setDefaultTextLabel(JLabel Label) {
 		Label.setFont(new Font("Roboto", Font.PLAIN, 14));
 		Label.setForeground(new Color(6, 20, 64));
 	}
 	
-	public void setDefaultJTextFieldDesign(JTextField TextField) {
+	protected void setDefaultJTextFieldDesign(JTextField TextField) {
 		TextField.setColumns(10);
 		TextField.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
 	}
 	
-	public void setDefaultBackgroundTextLabel(JLabel Label) {
+	protected void setDefaultBackgroundTextLabel(JLabel Label) {
 		Label.setFont(new Font("Roboto", Font.PLAIN, 11));
 		Label.setForeground(new Color(31, 60, 148));
 	}
 	
-	public void setDefaultTextJTextPane(JTextPane TextPane) {
+	protected void setDefaultTextJTextPane(JTextPane TextPane) {
 		TextPane.setFont(new Font("Roboto", Font.PLAIN, 14));
 		TextPane.setForeground(new Color(6, 20, 64));
 	}
 	
-	public void setDefaultJComboBox(JComboBox ComboBox) {
+	protected void setDefaultJComboBox(JComboBox ComboBox) {
 		ComboBox.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
 	}
 	
-	public void setDefaultJSpinner(JSpinner Spinner) {
+	protected void setDefaultJSpinner(JSpinner Spinner) {
 		Spinner.setBorder(new MatteBorder(1, 1, 1, 1, Color.darkGray));
 	}
 	
-	public void deleteFieldThreshold(JTextField TextField) {
+	protected void deleteFieldThreshold(JTextField TextField) {
 		
 		String String = TextField.getText();
 		
@@ -160,7 +160,18 @@ public class GenericDialog extends JDialog {
 		
 	}
 	
-	public void deleteFieldSpaces(JTextField TextField) {
+	protected void deleteFieldThreshold(JTextPane TextPane) {
+		
+		String String = TextPane.getText();
+		
+		if(String.length() > 512) {
+			String = String.substring(0, String.length() - 1);
+			TextPane.setText(String);
+		} 
+		
+	}
+	
+	protected void deleteFieldSpaces(JTextField TextField) {
 		
 		String String = TextField.getText();
 		
@@ -171,7 +182,7 @@ public class GenericDialog extends JDialog {
 		
 	}
 	
-	public boolean checkPasswordCharacters(char[] PasswordCharArray) {
+	protected boolean checkPasswordCharacters(char[] PasswordCharArray) {
 		
 		final char[] ValidCharacters = {'!', '#', '%', '&', '\'', '*', '+', '-', '/', '=', '?', '^', '_', '.', '{', '|', 'b', 'Y', 'f', 'M',
     			'k', 'A', 'x', 'W', 'o', 'L', 'h', 'R', 't', 'G', 'l', 'P', 'a', 'Z', 'g', 'J', 'z', 'D', 's', 'U', 'w', 'X', 'i', 'N', 'r', 'K',
@@ -196,7 +207,7 @@ public class GenericDialog extends JDialog {
 		
 	}
 	
-	public boolean checkAuthRegistrationFieldsValidity(JPasswordField PasswordField, JPasswordField ConfirmationPasswordField) {
+	protected boolean checkAuthRegistrationFieldsValidity(JPasswordField PasswordField, JPasswordField ConfirmationPasswordField) {
 		
 		char[] PasswordCharArray = PasswordField.getPassword();
 		char[] ConfirmationPasswordCharArray = ConfirmationPasswordField.getPassword();
@@ -228,7 +239,7 @@ public class GenericDialog extends JDialog {
 		
 	}
 	
-	public String setTextToCenter(String Text) {
+	protected String setTextToCenter(String Text) {
 
 		final int MaxSpace = 6;
 		

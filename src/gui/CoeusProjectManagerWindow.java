@@ -32,6 +32,7 @@ import javax.swing.JLayeredPane;
 import java.awt.CardLayout;
 import javax.swing.border.MatteBorder;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -68,8 +69,6 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 
 public class CoeusProjectManagerWindow extends GenericFrame {
-
-	private static final long serialVersionUID = 1L;
 	
 	private Controller MainController = Controller.getInstance();
 	private User ConnectedUser;
@@ -157,6 +156,7 @@ public class CoeusProjectManagerWindow extends GenericFrame {
 		TopPanel.add(CoeusTitlePanel, BorderLayout.WEST);
 		
 		JLabel CoeusLabel = new JLabel("Coeus");
+		CoeusLabel.setIcon(new ImageIcon(LoginWindow.class.getResource("/coeusIconLabel.png")));
 		CoeusLabel.setForeground(new Color(11, 28, 82));
 		CoeusLabel.setFont(new Font("Roboto Bk", Font.PLAIN, 70));
 		CoeusTitlePanel.add(CoeusLabel);

@@ -53,6 +53,7 @@ import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListModel;
@@ -73,8 +74,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 
 public class EmployeeEditorWindow extends GenericDialog {
-
-	private static final long serialVersionUID = 1L;
 
 	private Controller MainController = Controller.getInstance();
 	
@@ -116,21 +115,7 @@ public class EmployeeEditorWindow extends GenericDialog {
 	private String[] WorldStates;
 	private String[] RegionNames;
 
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					RegistrationWindow frame = new RegistrationWindow(1920, 1080, false);
-//					frame.setData();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-	
-	/**
+	/*
 	 *  Modality values guide:
 	 *  Modality = 0 -> FounderMode;
 	 *  Modality = 1 -> UserRegistrationMode;
@@ -167,6 +152,7 @@ public class EmployeeEditorWindow extends GenericDialog {
 		TopPanel.add(TitlePanel, BorderLayout.WEST);
 		
 		JLabel CoeusLabel = new JLabel("Coeus");
+		CoeusLabel.setIcon(new ImageIcon(LoginWindow.class.getResource("/coeusIconLabel.png")));
 		CoeusLabel.setForeground(new Color(15, 39, 115));
 		CoeusLabel.setFont(new Font("Roboto Bk", Font.PLAIN, 70));
 		TitlePanel.add(CoeusLabel);

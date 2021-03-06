@@ -18,7 +18,6 @@ public abstract class Project {
 	
 	private Controller MainController = Controller.getInstance();
 	
-	
 	// ALL
 	protected Project(String Name, String Description, LocalDate StartingDate, int MaxEmployee, String Modality, ArrayList<String> TopicList, ArrayList<Meeting> MeetingList) {
 		this(Name, StartingDate, MaxEmployee, Modality, TopicList);

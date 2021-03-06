@@ -34,6 +34,7 @@ public class Controller {
 	private GraphicsDevice GraphicDisplay;
 	private int DisplayWidth;
 	private int DisplayHeight;
+	private SwingWorker<Boolean, Integer> SwingWorker;
 	
 	private UserDAO UserDAO;
 	private WorldStateDAO WorldStateDAO;
@@ -43,8 +44,6 @@ public class Controller {
 	private MeetingDAO MeetingDAO;
 	private ProjectDAO ProjectDAO;
 	private MeetingInvitationDAO MeetingInvitationDAO;
-	
-	private SwingWorker<Boolean, Integer> SwingWorker;
 	
 	private LoginWindow LoginWindow;
 	private WelcomeWindow WelcomeWindow;
@@ -139,10 +138,6 @@ public class Controller {
 		
 	}
 	
-	public LoadingSplashWindow getLoadingSplashWindow() {
-		return LoadingSplashWindow;
-	}
-
 	/**
 	 *  Modality values guide:
 	 *  Modality = 0 -> FounderMode;
@@ -427,6 +422,10 @@ public class Controller {
 
 	public MeetingInvitationDAO getMeetingInvitationDAO() {
 		return MeetingInvitationDAO;
+	}
+	
+	public LoadingSplashWindow getLoadingSplashWindow() {
+		return LoadingSplashWindow;
 	}
 	
 }

@@ -14,8 +14,6 @@ public abstract class User {
 		private ArrayList<Project> ManagingProjectList = new ArrayList<Project>();
 		
 		private Controller MainController = Controller.getInstance();
-
-
 		
 		// ALL
 		protected User(Employee Employee, String Password, ArrayList<MeetingInvitation> MeetingInvitationList, ArrayList<Project> ProjectList, ArrayList<Project> ManagingProjectList) {

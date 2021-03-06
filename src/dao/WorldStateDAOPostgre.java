@@ -17,20 +17,6 @@ public class WorldStateDAOPostgre extends DAOPostgre implements WorldStateDAO {
 		
 	}
 	
-//	public static void main(String args[]) {
-//		
-//		WorldStatesDAO WorldStatesDAO = new WorldStatesDAOPostgre();
-//		
-//		ArrayList<String> StateNamesList = WorldStatesDAO.getAllStates();
-//		
-//		System.out.format(" [LISTA NAZIONI]\n");
-//		for(String s : StateNamesList) {
-//			System.out.println(" " + s);
-//		}
-//		
-//	}
-	
-	
 	@Override
 	public ArrayList<String> getAllStateNames() {
 		

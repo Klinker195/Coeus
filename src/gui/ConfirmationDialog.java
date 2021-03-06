@@ -31,17 +31,6 @@ public class ConfirmationDialog extends GenericDialog {
 	private JButton CancelButton;
 	
 	private boolean Check;
-	
-//	public static void main(String[] args) {
-//		try {
-//			
-//			ErrorDialog dialog = new ErrorDialog("KFC", 1920, 1080);
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			dialog.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
 
 	public ConfirmationDialog(String Title, String Text, int DisplayWidth, int DisplayHeight) {
 		

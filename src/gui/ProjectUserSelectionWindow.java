@@ -57,9 +57,6 @@ public class ProjectUserSelectionWindow extends GenericDialog {
 	private JLabel MembersLimitLabel;
 	private JLabel MembersLimitVariableLabel;
 	
-	/**
-	 * Create the frame.
-	 */
 	public ProjectUserSelectionWindow(Project Project, User ConnectedUser, int DisplayWidth, int DisplayHeight) {
 		
 		this.Project = Project;

@@ -520,18 +520,7 @@ public class MeetingEditorWindow extends GenericDialog {
 		}
 		
 	}
-	
-	public void deleteFieldThreshold(JTextField TextField) {
-		
-		String String = TextField.getText();
-		
-		if(String.length() > 128) {
-			String = String.substring(0, String.length() - 1);
-			TextField.setText(String);
-		} 
-		
-	}
-	
+
 	public void setMeetingsTimesData(String Date) {
 		
 		ArrayList<Meeting> MeetingTimesList = MainController.getMeetingDAO().getAllMeetingsByDate(Date);

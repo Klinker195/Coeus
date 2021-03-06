@@ -75,7 +75,6 @@ import javax.swing.ScrollPaneConstants;
 
 public class PersonalSkillEditorWindow extends GenericDialog {
 
-	private static final long serialVersionUID = 1L;
 
 	private Controller MainController = Controller.getInstance();
 	

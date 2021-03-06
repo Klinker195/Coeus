@@ -57,17 +57,6 @@ public class ProjectEditorWindow extends GenericDialog {
 	private JSpinner MaxEmployeeSpinner;
 
 	private Controller MainController = Controller.getInstance();
-	
-//	public static void main(String[] args) {
-//		try {
-//			ProjectEditorWindow dialog = new ProjectEditorWindow(null, 1920, 1080);
-//			dialog.setData();
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			dialog.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
 
 	public ProjectEditorWindow(User ConnectedUser, int DisplayWidth, int DisplayHeight) {
 		
@@ -514,29 +503,7 @@ public class ProjectEditorWindow extends GenericDialog {
 		return true;
 		
 	}
-	
-	public void deleteFieldThreshold(JTextField TextField) {
-		
-		String String = TextField.getText();
-		
-		if(String.length() > 128) {
-			String = String.substring(0, String.length() - 1);
-			TextField.setText(String);
-		} 
-		
-	}
-	
-	public void deleteFieldThreshold(JTextPane TextPane) {
-		
-		String String = TextPane.getText();
-		
-		if(String.length() > 512) {
-			String = String.substring(0, String.length() - 1);
-			TextPane.setText(String);
-		} 
-		
-	}
-	
+
 	public void setData() {
 		
 		ProjectModalityJComboBox.setModel(new DefaultComboBoxModel<String>(MainController.arrayListToStringArray(MainController.getProjectDAO().getAllModalityNames())));
